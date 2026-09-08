@@ -110,7 +110,7 @@ NB :
 # Your answers:
 # ==========================================
 
-ip host = 32 - 27 = 5
+ host bits = 32 - 27 = 5
 total addresses = 2^5 = 32
 
 so
@@ -165,7 +165,7 @@ therefore:
 # Your answers:
 # ==========================================
 
-IP Host = 32 - 28 = 4
+Host bits = 32 - 28 = 4
 Total addresses = 2^4 = 16
 
 10.20.30.0 -> 10.20.30.15
