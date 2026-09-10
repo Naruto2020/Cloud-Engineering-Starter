@@ -1,0 +1,546 @@
+Resources:
+  MyBucketF68F3FF0:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - ExpirationInDays: 30
+            Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VersioningConfiguration:
+        Status: Enabled
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: CloudCdkStack/MyBucket/Resource
+  TheVPC92636AB0:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/Resource
+  TheVPCPublicSubnet1Subnet770D4FF2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.0.0/18
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PublicSubnet1
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/Subnet
+  TheVPCPublicSubnet1RouteTable17DA183D:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PublicSubnet1
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/RouteTable
+  TheVPCPublicSubnet1RouteTableAssociationE5186D77:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: TheVPCPublicSubnet1RouteTable17DA183D
+      SubnetId:
+        Ref: TheVPCPublicSubnet1Subnet770D4FF2
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/RouteTableAssociation
+  TheVPCPublicSubnet1DefaultRoute6D26543F:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: TheVPCIGWFA25CC08
+      RouteTableId:
+        Ref: TheVPCPublicSubnet1RouteTable17DA183D
+    DependsOn:
+      - TheVPCVPCGWC9B93E30
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/DefaultRoute
+  TheVPCPublicSubnet1EIP4412F690:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PublicSubnet1
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/EIP
+  TheVPCPublicSubnet1NATGatewayC61D892B:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - TheVPCPublicSubnet1EIP4412F690
+          - AllocationId
+      SubnetId:
+        Ref: TheVPCPublicSubnet1Subnet770D4FF2
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PublicSubnet1
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+    DependsOn:
+      - TheVPCPublicSubnet1DefaultRoute6D26543F
+      - TheVPCPublicSubnet1RouteTableAssociationE5186D77
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/NATGateway
+  TheVPCPublicSubnet2Subnet73F96DA9:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.64.0/18
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PublicSubnet2
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/Subnet
+  TheVPCPublicSubnet2RouteTable3609F42C:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PublicSubnet2
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/RouteTable
+  TheVPCPublicSubnet2RouteTableAssociationB4B0A733:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: TheVPCPublicSubnet2RouteTable3609F42C
+      SubnetId:
+        Ref: TheVPCPublicSubnet2Subnet73F96DA9
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/RouteTableAssociation
+  TheVPCPublicSubnet2DefaultRouteFEB062B2:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: TheVPCIGWFA25CC08
+      RouteTableId:
+        Ref: TheVPCPublicSubnet2RouteTable3609F42C
+    DependsOn:
+      - TheVPCVPCGWC9B93E30
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/DefaultRoute
+  TheVPCPrivateSubnet1Subnet571D3690:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.128.0/18
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PrivateSubnet1
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/Subnet
+  TheVPCPrivateSubnet1RouteTableF6513BC2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PrivateSubnet1
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/RouteTable
+  TheVPCPrivateSubnet1RouteTableAssociation46F1FFFC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: TheVPCPrivateSubnet1RouteTableF6513BC2
+      SubnetId:
+        Ref: TheVPCPrivateSubnet1Subnet571D3690
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/RouteTableAssociation
+  TheVPCPrivateSubnet1DefaultRouteD1B9E467:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: TheVPCPublicSubnet1NATGatewayC61D892B
+      RouteTableId:
+        Ref: TheVPCPrivateSubnet1RouteTableF6513BC2
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/DefaultRoute
+  TheVPCPrivateSubnet2SubnetCC3D7013:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.192.0/18
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PrivateSubnet2
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/Subnet
+  TheVPCPrivateSubnet2RouteTable9AC81FAC:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC/PrivateSubnet2
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/RouteTable
+  TheVPCPrivateSubnet2RouteTableAssociation336D47D1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: TheVPCPrivateSubnet2RouteTable9AC81FAC
+      SubnetId:
+        Ref: TheVPCPrivateSubnet2SubnetCC3D7013
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/RouteTableAssociation
+  TheVPCPrivateSubnet2DefaultRoute52A1F245:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: TheVPCPublicSubnet1NATGatewayC61D892B
+      RouteTableId:
+        Ref: TheVPCPrivateSubnet2RouteTable9AC81FAC
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/DefaultRoute
+  TheVPCIGWFA25CC08:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/TheVPC
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/IGW
+  TheVPCVPCGWC9B93E30:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId:
+        Ref: TheVPCIGWFA25CC08
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/VPCGW
+  TheVPCRestrictDefaultSecurityGroupCustomResourceAFA88FCE:
+    Type: Custom::VpcRestrictDefaultSG
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E
+          - Arn
+      DefaultSecurityGroupId:
+        Fn::GetAtt:
+          - TheVPC92636AB0
+          - DefaultSecurityGroup
+      Account:
+        Ref: AWS::AccountId
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TheVPC/RestrictDefaultSecurityGroupCustomResource/Default
+  CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: Inline
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:AuthorizeSecurityGroupIngress
+                  - ec2:AuthorizeSecurityGroupEgress
+                  - ec2:RevokeSecurityGroupIngress
+                  - ec2:RevokeSecurityGroupEgress
+                Resource:
+                  - Fn::Join:
+                      - ""
+                      - - "arn:"
+                        - Ref: AWS::Partition
+                        - ":ec2:"
+                        - Ref: AWS::Region
+                        - ":"
+                        - Ref: AWS::AccountId
+                        - :security-group/
+                        - Fn::GetAtt:
+                            - TheVPC92636AB0
+                            - DefaultSecurityGroup
+    Metadata:
+      aws:cdk:path: CloudCdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role
+  CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
+        S3Key: 02b51ab524e7bcf8f477de3e71e5f9a72e448301b26ba62e9e75a14f9c55a093.zip
+      Timeout: 900
+      MemorySize: 128
+      Handler: __entrypoint__.handler
+      Role:
+        Fn::GetAtt:
+          - CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0
+          - Arn
+      Runtime: nodejs24.x
+      Description: Lambda function for removing all inbound/outbound rules from the VPC default security group
+    DependsOn:
+      - CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler
+      aws:asset:path: asset.02b51ab524e7bcf8f477de3e71e5f9a72e448301b26ba62e9e75a14f9c55a093
+      aws:asset:property: Code
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/81UTW/iMBD9LfURmSxKV2jFLWSrKlK3jWDVwyJUTeyBuhg78jhh2Sj/fUUcoFrtrT3k5Pny+PnNs+Monn6LJjdwoLGQu7FWRdQsPYgdhwO9NHQbNfNK7NCvGlajI2UNSjbzrkLO0Ah3LL2yhs3Y8vblR/KY3N99Z5wV2opdXhVaiUQIJGIzNmKcabVBcRQaF5VGYrNV065b3jCQ8uF9qsvwbsuIrds1Tzcm4Gg5ijhqnkuxapgqEykdEuH5gD38Tv6cHQP+Hjwe4Bgioc9znvIAbVkVprsZ1KA0FEorf/xlDfb761JksreFkm5+utXloDI0ycon8wCVEa9nWlRZT9N/yoFIbU1W1tMe8ZNJHULP3Yh1JAwBRT+Nxwt1bLbqZjAUgMNAEaQUBHSyFrby+BMKjdf4NZYQWaG6Bpfik3GX5aflSjbPnarB46crcwOaBsD5x2AMB8lAYAQVZsajM3jRUPjjei/xHsTrHo1vW75AspUTyNOKvN2f3e6Bd8L8fz53tlYS3RwIeUKEfulhq8y25cZKjN7oSx1/jeJJNLl5I6XGrjJe7TFahPUvGKyRxGYGAAA=
+    Metadata:
+      aws:cdk:path: CloudCdkStack/CDKMetadata/Default
+    Condition: CDKMetadataAvailable
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - af-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-3
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-4
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-2
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - il-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+      - Fn::Equals:
+          - Ref: AWS::Region
+          - us-west-2
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+
