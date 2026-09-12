@@ -38,12 +38,15 @@ SOA     → Zone authority information
 DNS port
 UDP :53
 TCP :53
+
 Resolver
 Client → Recursive Resolver → Answer
 Authoritative server
 Authoritative server
         ↓
 Official DNS records for a zone
+
+
 Linux troubleshooting
 dig example.com
 dig +short example.com

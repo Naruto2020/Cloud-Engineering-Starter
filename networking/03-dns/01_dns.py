@@ -1,3 +1,4 @@
+
 🌐 Network Fundamentals for Cloud Engineer
 Lesson 8 — DNS (Domain Name System)
 
@@ -86,6 +87,8 @@ TCP/UDP
 Port
      ↓
 Application
+
+
 3. DNS is not HTTP
 
 This distinction is important.
@@ -103,12 +106,18 @@ Finds the IP:
 example.com
       ↓
 93.184.216.34
+
+
 TCP
 
 Creates the transport connection:
 
 Client → Server
+
+
 TCP :443
+
+
 HTTPS
 
 Actually communicates with the web server:
@@ -183,6 +192,8 @@ example.com
 MX
      ↓
 mail.example.com
+
+
 6. The command you'll use a lot: dig
 
 On Linux:
@@ -205,6 +216,7 @@ google.com.    A    142.250.x.x
 Meaning:
 
 google.com has this IPv4 address.
+
 
 7. Ask specifically for an A record
 
@@ -412,6 +424,8 @@ Recursive Resolver
 finds answer
   ↓
 Client
+
+
 Authoritative DNS server
 
 "I am responsible for the official DNS records for this domain."

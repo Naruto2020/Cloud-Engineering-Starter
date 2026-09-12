@@ -46,24 +46,24 @@ Resources:
           Value: cloud-engineering-satrter
     Metadata:
       aws:cdk:path: CloudCdkStack/TheVPC/Resource
-  TheVPCPublicSubnet1Subnet770D4FF2:
+  TheVPCingressSubnet1Subnet9B9DF7E0:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
         Fn::Select:
           - 0
           - Fn::GetAZs: ""
-      CidrBlock: 10.0.0.0/18
+      CidrBlock: 10.0.0.0/24
       MapPublicIpOnLaunch: true
       Tags:
         - Key: aws-cdk:subnet-name
-          Value: Public
+          Value: ingress
         - Key: aws-cdk:subnet-type
           Value: Public
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PublicSubnet1
+          Value: CloudCdkStack/TheVPC/ingressSubnet1
         - Key: Owner
           Value: steve
         - Key: Project
@@ -71,15 +71,15 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/Subnet
-  TheVPCPublicSubnet1RouteTable17DA183D:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/Subnet
+  TheVPCingressSubnet1RouteTable47CFEC27:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PublicSubnet1
+          Value: CloudCdkStack/TheVPC/ingressSubnet1
         - Key: Owner
           Value: steve
         - Key: Project
@@ -87,29 +87,29 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/RouteTable
-  TheVPCPublicSubnet1RouteTableAssociationE5186D77:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/RouteTable
+  TheVPCingressSubnet1RouteTableAssociationEAB00BCF:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: TheVPCPublicSubnet1RouteTable17DA183D
+        Ref: TheVPCingressSubnet1RouteTable47CFEC27
       SubnetId:
-        Ref: TheVPCPublicSubnet1Subnet770D4FF2
+        Ref: TheVPCingressSubnet1Subnet9B9DF7E0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/RouteTableAssociation
-  TheVPCPublicSubnet1DefaultRoute6D26543F:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/RouteTableAssociation
+  TheVPCingressSubnet1DefaultRouteB77FAA4E:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
         Ref: TheVPCIGWFA25CC08
       RouteTableId:
-        Ref: TheVPCPublicSubnet1RouteTable17DA183D
+        Ref: TheVPCingressSubnet1RouteTable47CFEC27
     DependsOn:
       - TheVPCVPCGWC9B93E30
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/DefaultRoute
-  TheVPCPublicSubnet1EIP4412F690:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/DefaultRoute
+  TheVPCingressSubnet1EIP5976F70D:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
@@ -117,54 +117,54 @@ Resources:
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PublicSubnet1
+          Value: CloudCdkStack/TheVPC/ingressSubnet1
         - Key: Owner
           Value: steve
         - Key: Project
           Value: cloud-engineering-satrter
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/EIP
-  TheVPCPublicSubnet1NATGatewayC61D892B:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/EIP
+  TheVPCingressSubnet1NATGateway439153F2:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId:
         Fn::GetAtt:
-          - TheVPCPublicSubnet1EIP4412F690
+          - TheVPCingressSubnet1EIP5976F70D
           - AllocationId
       SubnetId:
-        Ref: TheVPCPublicSubnet1Subnet770D4FF2
+        Ref: TheVPCingressSubnet1Subnet9B9DF7E0
       Tags:
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PublicSubnet1
+          Value: CloudCdkStack/TheVPC/ingressSubnet1
         - Key: Owner
           Value: steve
         - Key: Project
           Value: cloud-engineering-satrter
     DependsOn:
-      - TheVPCPublicSubnet1DefaultRoute6D26543F
-      - TheVPCPublicSubnet1RouteTableAssociationE5186D77
+      - TheVPCingressSubnet1DefaultRouteB77FAA4E
+      - TheVPCingressSubnet1RouteTableAssociationEAB00BCF
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet1/NATGateway
-  TheVPCPublicSubnet2Subnet73F96DA9:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/NATGateway
+  TheVPCingressSubnet2Subnet8155F998:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
         Fn::Select:
           - 1
           - Fn::GetAZs: ""
-      CidrBlock: 10.0.64.0/18
+      CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
       Tags:
         - Key: aws-cdk:subnet-name
-          Value: Public
+          Value: ingress
         - Key: aws-cdk:subnet-type
           Value: Public
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PublicSubnet2
+          Value: CloudCdkStack/TheVPC/ingressSubnet2
         - Key: Owner
           Value: steve
         - Key: Project
@@ -172,15 +172,15 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/Subnet
-  TheVPCPublicSubnet2RouteTable3609F42C:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet2/Subnet
+  TheVPCingressSubnet2RouteTableBEB96868:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PublicSubnet2
+          Value: CloudCdkStack/TheVPC/ingressSubnet2
         - Key: Owner
           Value: steve
         - Key: Project
@@ -188,46 +188,46 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/RouteTable
-  TheVPCPublicSubnet2RouteTableAssociationB4B0A733:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet2/RouteTable
+  TheVPCingressSubnet2RouteTableAssociation4E496446:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: TheVPCPublicSubnet2RouteTable3609F42C
+        Ref: TheVPCingressSubnet2RouteTableBEB96868
       SubnetId:
-        Ref: TheVPCPublicSubnet2Subnet73F96DA9
+        Ref: TheVPCingressSubnet2Subnet8155F998
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/RouteTableAssociation
-  TheVPCPublicSubnet2DefaultRouteFEB062B2:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet2/RouteTableAssociation
+  TheVPCingressSubnet2DefaultRoute293EF68A:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
         Ref: TheVPCIGWFA25CC08
       RouteTableId:
-        Ref: TheVPCPublicSubnet2RouteTable3609F42C
+        Ref: TheVPCingressSubnet2RouteTableBEB96868
     DependsOn:
       - TheVPCVPCGWC9B93E30
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PublicSubnet2/DefaultRoute
-  TheVPCPrivateSubnet1Subnet571D3690:
+      aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet2/DefaultRoute
+  TheVPCapplicationSubnet1Subnet2149DB21:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
         Fn::Select:
           - 0
           - Fn::GetAZs: ""
-      CidrBlock: 10.0.128.0/18
+      CidrBlock: 10.0.2.0/24
       MapPublicIpOnLaunch: false
       Tags:
         - Key: aws-cdk:subnet-name
-          Value: Private
+          Value: application
         - Key: aws-cdk:subnet-type
           Value: Private
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PrivateSubnet1
+          Value: CloudCdkStack/TheVPC/applicationSubnet1
         - Key: Owner
           Value: steve
         - Key: Project
@@ -235,15 +235,15 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/Subnet
-  TheVPCPrivateSubnet1RouteTableF6513BC2:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet1/Subnet
+  TheVPCapplicationSubnet1RouteTable0C50F734:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PrivateSubnet1
+          Value: CloudCdkStack/TheVPC/applicationSubnet1
         - Key: Owner
           Value: steve
         - Key: Project
@@ -251,44 +251,44 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/RouteTable
-  TheVPCPrivateSubnet1RouteTableAssociation46F1FFFC:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet1/RouteTable
+  TheVPCapplicationSubnet1RouteTableAssociationC56EF4FA:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: TheVPCPrivateSubnet1RouteTableF6513BC2
+        Ref: TheVPCapplicationSubnet1RouteTable0C50F734
       SubnetId:
-        Ref: TheVPCPrivateSubnet1Subnet571D3690
+        Ref: TheVPCapplicationSubnet1Subnet2149DB21
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/RouteTableAssociation
-  TheVPCPrivateSubnet1DefaultRouteD1B9E467:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet1/RouteTableAssociation
+  TheVPCapplicationSubnet1DefaultRoute85977A65:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId:
-        Ref: TheVPCPublicSubnet1NATGatewayC61D892B
+        Ref: TheVPCingressSubnet1NATGateway439153F2
       RouteTableId:
-        Ref: TheVPCPrivateSubnet1RouteTableF6513BC2
+        Ref: TheVPCapplicationSubnet1RouteTable0C50F734
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet1/DefaultRoute
-  TheVPCPrivateSubnet2SubnetCC3D7013:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet1/DefaultRoute
+  TheVPCapplicationSubnet2Subnet38670E3A:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
         Fn::Select:
           - 1
           - Fn::GetAZs: ""
-      CidrBlock: 10.0.192.0/18
+      CidrBlock: 10.0.3.0/24
       MapPublicIpOnLaunch: false
       Tags:
         - Key: aws-cdk:subnet-name
-          Value: Private
+          Value: application
         - Key: aws-cdk:subnet-type
           Value: Private
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PrivateSubnet2
+          Value: CloudCdkStack/TheVPC/applicationSubnet2
         - Key: Owner
           Value: steve
         - Key: Project
@@ -296,15 +296,15 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/Subnet
-  TheVPCPrivateSubnet2RouteTable9AC81FAC:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet2/Subnet
+  TheVPCapplicationSubnet2RouteTable5BBAEB7F:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Environment
           Value: development
         - Key: Name
-          Value: CloudCdkStack/TheVPC/PrivateSubnet2
+          Value: CloudCdkStack/TheVPC/applicationSubnet2
         - Key: Owner
           Value: steve
         - Key: Project
@@ -312,26 +312,26 @@ Resources:
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/RouteTable
-  TheVPCPrivateSubnet2RouteTableAssociation336D47D1:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet2/RouteTable
+  TheVPCapplicationSubnet2RouteTableAssociation8D072598:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: TheVPCPrivateSubnet2RouteTable9AC81FAC
+        Ref: TheVPCapplicationSubnet2RouteTable5BBAEB7F
       SubnetId:
-        Ref: TheVPCPrivateSubnet2SubnetCC3D7013
+        Ref: TheVPCapplicationSubnet2Subnet38670E3A
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/RouteTableAssociation
-  TheVPCPrivateSubnet2DefaultRoute52A1F245:
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet2/RouteTableAssociation
+  TheVPCapplicationSubnet2DefaultRoute7BA86B85:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId:
-        Ref: TheVPCPublicSubnet1NATGatewayC61D892B
+        Ref: TheVPCingressSubnet1NATGateway439153F2
       RouteTableId:
-        Ref: TheVPCPrivateSubnet2RouteTable9AC81FAC
+        Ref: TheVPCapplicationSubnet2RouteTable5BBAEB7F
     Metadata:
-      aws:cdk:path: CloudCdkStack/TheVPC/PrivateSubnet2/DefaultRoute
+      aws:cdk:path: CloudCdkStack/TheVPC/applicationSubnet2/DefaultRoute
   TheVPCIGWFA25CC08:
     Type: AWS::EC2::InternetGateway
     Properties:
@@ -432,10 +432,78 @@ Resources:
       aws:cdk:path: CloudCdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler
       aws:asset:path: asset.02b51ab524e7bcf8f477de3e71e5f9a72e448301b26ba62e9e75a14f9c55a093
       aws:asset:property: Code
+  LoadBalancerSG4572B15E:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Load Balancer Security Group
+      SecurityGroupEgress:
+        - CidrIp: 255.255.255.255/32
+          Description: Disallow all traffic
+          FromPort: 252
+          IpProtocol: icmp
+          ToPort: 86
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow HTTPS traffic
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+        - CidrIp: 0.0.0.0/0
+          Description: Allow HTTP traffic
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/LoadBalancerSG/Resource
+  ApplicationSGE6EB7629:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Application Security Group
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/ApplicationSG/Resource
+  ApplicationSGfromCloudCdkStackLoadBalancerSG7174660B808007F5AFED:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Allow HTTP traffic from LB
+      FromPort: 8080
+      GroupId:
+        Fn::GetAtt:
+          - ApplicationSGE6EB7629
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - LoadBalancerSG4572B15E
+          - GroupId
+      ToPort: 8080
+    Metadata:
+      aws:cdk:path: CloudCdkStack/ApplicationSG/from CloudCdkStackLoadBalancerSG7174660B:8080
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/81UTW/iMBD9LfURmSxKV2jFLWSrKlK3jWDVwyJUTeyBuhg78jhh2Sj/fUUcoFrtrT3k5Pny+PnNs+Monn6LJjdwoLGQu7FWRdQsPYgdhwO9NHQbNfNK7NCvGlajI2UNSjbzrkLO0Ah3LL2yhs3Y8vblR/KY3N99Z5wV2opdXhVaiUQIJGIzNmKcabVBcRQaF5VGYrNV065b3jCQ8uF9qsvwbsuIrds1Tzcm4Gg5ijhqnkuxapgqEykdEuH5gD38Tv6cHQP+Hjwe4Bgioc9znvIAbVkVprsZ1KA0FEorf/xlDfb761JksreFkm5+utXloDI0ycon8wCVEa9nWlRZT9N/yoFIbU1W1tMe8ZNJHULP3Yh1JAwBRT+Nxwt1bLbqZjAUgMNAEaQUBHSyFrby+BMKjdf4NZYQWaG6Bpfik3GX5aflSjbPnarB46crcwOaBsD5x2AMB8lAYAQVZsajM3jRUPjjei/xHsTrHo1vW75AspUTyNOKvN2f3e6Bd8L8fz53tlYS3RwIeUKEfulhq8y25cZKjN7oSx1/jeJJNLl5I6XGrjJe7TFahPUvGKyRxGYGAAA=
+      Analytics: v2:deflate64:H4sIAAAAAAAA/81V32/aMBD+W+pHZDJEJzTxFrIKRWoLgqoPQ6hynIO6mHPmH2FZlP99SuKEduvDpm0ST7bPd5+/O38+j4Px5FMwumInM+TpYShFEpRry/iBspN5Ks11UM4cP4DdlCQHbYRCSMnUageUAHJdZFYoJFOyvn66C+/D+c1nQkkiFT8sXSIFDzkHY8iUDAglUuyAF1zCykkwZLopq21FS8LS9Pb1VrNDm5AB2VZbGu2w5VFR4OOgfMz4piQiC9NUgzHQHXBk38Lv3QKZnTMLJ1Z0FuMSBBsp3Im906ylvikJF6m+Y+bQBx7hTcRDkdWGNiNSM/7dCC1yZoFUPonHZURblHXjtikJy5mQLBFS2OKLwg4mz3ic+nl92KwuaZ9l1oLE2QJvmUP+3N2JyPJJ9JM7M0bsMc7yiS/XAiMNPnsyaPK5CBZeCvf9vZHpphHApRC8DBatlFoB1bOVchYeWCLhbD/bQmMUFw1A71xPbuJlPZyLTb1Y/7kyd0yaC6j539G4HCYXQqNVYYwWNEKvobbH+VVoLePPR0BL18CdFraYa+Wy+jPJuD8qBcO1yHpoSpiU6hRKuXA2UQ5Tz9R3hxj3NaHumyCcYYxSoP842pfFFSLwGrNr/Q7FVwe+QM199p3lP2D+WXo1/rtMav8OtX30r8v4i8EHVxVdgVFOc6CRM1Ydu2XTTZsu8P7+UqtcpKBnzAANjQG7tmwvcF9RVCkEL+ZDPv4YjEfB6OrFCDHUDq04QrBqxx+Mzb8gUAgAAA==
     Metadata:
       aws:cdk:path: CloudCdkStack/CDKMetadata/Default
     Condition: CDKMetadataAvailable

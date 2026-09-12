@@ -369,6 +369,7 @@ just pauses it
 #
 # Answer:
 #
+
 **1.** Is the nginx service running?
 
 Yes the nginx service is running
