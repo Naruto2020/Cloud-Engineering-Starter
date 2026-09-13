@@ -4,113 +4,113 @@
 
 # ============================================================
 
-# Today's objective is to understand what a Linux system
+Today's objective is to understand what a Linux system
 
-# actually is and how its main components interact.
+actually is and how its main components interact.
 
-#
 
-# By the end of this module, you should be able to explain
 
-# the following architecture:
+By the end of this module, you should be able to explain
 
-#
+the following architecture:
 
-#
 
-# ┌─────────────────────────────┐
 
-# │       Applications          │
 
-# │  nginx / node / python ...  │
 
-# └──────────────┬──────────────┘
+┌─────────────────────────────┐
 
-# │
+│       Applications          │
 
-# ▼
+│  nginx / node / python ...  │
 
-# ┌─────────────────────────────┐
+└──────────────┬──────────────┘
 
-# │           Kernel            │
+│
 
-# │ CPU │ RAM │ Disk │ Network  │
+▼
 
-# └──────────────┬──────────────┘
+┌─────────────────────────────┐
 
-# │
+│           Kernel            │
 
-# ▼
+│ CPU │ RAM │ Disk │ Network  │
 
-# ┌─────────────────────────────┐
+└──────────────┬──────────────┘
 
-# │          Hardware           │
+│
 
-# │ CPU │ RAM │ SSD │ NIC ...   │
+▼
 
-# └─────────────────────────────┘
+┌─────────────────────────────┐
 
-# ============================================================
+│          Hardware           │
 
-# 1. What is an Operating System?
+│ CPU │ RAM │ SSD │ NIC ...   │
 
-# ============================================================
+└─────────────────────────────┘
 
-# A computer has hardware:
+============================================================
 
-#
+1. What is an Operating System?
 
-# - CPU
+============================================================
 
-# - RAM
+A computer has hardware:
 
-# - Disk
 
-# - Network interface
 
-# - Other devices
+- CPU
 
-#
+- RAM
 
-# However, an application such as:
+- Disk
 
-#
+- Network interface
 
-# node app.js
+- Other devices
 
-#
 
-# does not directly manipulate the CPU or the disk.
 
-#
+However, an application such as:
 
-# Instead, it interacts with the Operating System.
 
-#
 
-# The Operating System is responsible for providing services
+node app.js
 
-# such as:
 
-#
 
-# - Process management
+does not directly manipulate the CPU or the disk.
 
-# - Memory management
 
-# - File management
 
-# - Network management
+Instead, it interacts with the Operating System.
 
-# - User management
 
-# - Access to hardware
 
-#
+The Operating System is responsible for providing services
 
-# In Linux, the core of the Operating System is called
+such as:
 
-# the KERNEL.
+
+
+- Process management
+
+- Memory management
+
+- File management
+
+- Network management
+
+- User management
+
+- Access to hardware
+
+
+
+In Linux, the core of the Operating System is called
+
+the KERNEL.
 
 # ============================================================
 
@@ -118,75 +118,76 @@
 
 # ============================================================
 
-# Imagine that your application needs to execute:
 
-#
+Imagine that your application needs to execute:
 
-# const data = readFile("config.json");
 
-#
 
-# The application does not directly tell the SSD:
+const data = readFile("config.json");
 
-#
 
-# "Hey SSD, give me the data."
 
-#
+The application does not directly tell the SSD:
 
-# Instead, the application requests the service through
 
-# the operating system using a SYSTEM CALL.
 
-#
+"Hey SSD, give me the data."
 
-#
 
-# Application
 
-# │
+Instead, the application requests the service through
 
-# │ system call
+the operating system using a SYSTEM CALL.
 
-# ▼
 
-# Kernel
 
-# │
 
-# ▼
 
-# Filesystem
+Application
 
-# │
+│
 
-# ▼
+│ system call
 
-# Disk
+▼
 
-#
+Kernel
 
-#
+│
 
-# The kernel therefore acts as an intermediary between
+▼
 
-# applications and the hardware.
+Filesystem
 
-#
+│
 
-# It manages access to important system resources such as:
+▼
 
-#
+Disk
 
-# - CPU
 
-# - Memory
 
-# - Storage
 
-# - Network
 
-# - Devices
+The kernel therefore acts as an intermediary between
+
+applications and the hardware.
+
+
+
+It manages access to important system resources such as:
+
+
+
+- CPU
+
+- Memory
+
+- Storage
+
+- Network
+
+- Devices
 
 # ============================================================
 
@@ -194,85 +195,86 @@
 
 # ============================================================
 
-# This is an important concept for a Cloud Engineer.
 
-#
+This is an important concept for a Cloud Engineer.
 
-# We can simplify Linux into two main worlds:
 
-#
 
-#
+We can simplify Linux into two main worlds:
 
-# ┌──────────────────────────────┐
 
-# │          USER SPACE          │
 
-# │                              │
 
-# │ bash                         │
 
-# │ node                         │
+┌──────────────────────────────┐
 
-# │ nginx                        │
+│          USER SPACE          │
 
-# │ python                       │
+│                              │
 
-# │ docker                       │
+│ bash                         │
 
-# │ etc.                         │
+│ node                         │
 
-# └──────────────┬───────────────┘
+│ nginx                        │
 
-# │
+│ python                       │
 
-# System Calls
+│ docker                       │
 
-# │
+│ etc.                         │
 
-# ┌──────────────▼───────────────┐
+└──────────────┬───────────────┘
 
-# │         KERNEL SPACE         │
+│
 
-# │                              │
+System Calls
 
-# │ CPU                          │
+│
 
-# │ Memory                       │
+┌──────────────▼───────────────┐
 
-# │ Filesystem                   │
+│         KERNEL SPACE         │
 
-# │ Network                      │
+│                              │
 
-# │ Devices                      │
+│ CPU                          │
 
-# └──────────────────────────────┘
+│ Memory                       │
 
-#
+│ Filesystem                   │
 
-#
+│ Network                      │
 
-# When you execute:
+│ Devices                      │
 
-#
+└──────────────────────────────┘
 
-# ls
 
-#
 
-# "ls" is a program running in USER SPACE.
 
-#
 
-# When it needs information about files and directories,
+When you execute:
 
-# it requests that information from the kernel.
 
-#
 
-# The kernel then interacts with the filesystem and the
+ls
 
-# underlying hardware when necessary.
+
+
+"ls" is a program running in USER SPACE.
+
+
+
+When it needs information about files and directories,
+
+it requests that information from the kernel.
+
+
+
+The kernel then interacts with the filesystem and the
+
+underlying hardware when necessary.
 
 # ============================================================
 
@@ -280,85 +282,87 @@
 
 # ============================================================
 
-# Now we reach another fundamental concept.
 
-#
+Now we reach another fundamental concept.
 
-# When you run:
 
-#
 
-# node app.js
+When you run:
 
-#
 
-# you are executing a program.
 
-#
+node app.js
 
-# The operating system creates a PROCESS to run that program.
 
-#
 
-#
+you are executing a program.
 
-# app.js
 
-# ↓
 
-# Node.js
+The operating system creates a PROCESS to run that program.
 
-# ↓
 
-# Process
 
-# ↓
 
-# PID = 1234
 
-#
+app.js
 
-#
+↓
 
-# PID stands for PROCESS ID.
+Node.js
 
-#
+↓
 
-# It is the unique identifier assigned to a process.
+Process
 
-#
+↓
 
-# You can inspect running processes with:
+PID = 1234
 
-#
 
-# ps
 
-#
 
-# or:
 
-#
+PID stands for PROCESS ID.
 
-# ps aux
 
-#
 
-#
+It is the unique identifier assigned to a process.
 
-# Example output:
 
-#
 
-#
+You can inspect running processes with:
 
-# USER    PID   %CPU   %MEM   COMMAND
 
-# root      1    0.0    0.1   systemd
 
-# steve  1234    2.1    1.4   node app.js
+ps
 
-# steve  1280    0.0    0.2   bash
+
+
+or:
+
+
+
+ps aux
+
+
+
+
+
+Example output:
+
+
+
+
+
+USER    PID   %CPU   %MEM   COMMAND
+
+root      1    0.0    0.1   systemd
+
+steve  1234    2.1    1.4   node app.js
+
+steve  1280    0.0    0.2   bash
+
 
 # ============================================================
 
@@ -366,97 +370,98 @@
 
 # ============================================================
 
-# Because in production, you will often encounter problems
 
-# such as:
+Because in production, you will often encounter problems
 
-#
+such as:
 
-# "My application is not responding."
 
-#
 
-# One of the first things you may want to check is whether
+"My application is not responding."
 
-# the application process is still running.
 
-#
 
-# For example:
+One of the first things you may want to check is whether
 
-#
+the application process is still running.
 
-# ps aux | grep node
 
-#
 
-#
+For example:
 
-# If you find:
 
-#
 
-# steve  1234 ... node app.js
+ps aux | grep node
 
-#
 
-# you know that the Node.js process exists and has PID 1234.
 
-#
 
-# You can then investigate its state, resource usage,
 
-# logs, network connections, etc.
+If you find:
 
-#
 
-# If necessary, you can also terminate the process:
 
-#
+steve  1234 ... node app.js
 
-# kill 1234
 
-#
 
-#
+you know that the Node.js process exists and has PID 1234.
 
-# This is the beginning of a fundamental Cloud Engineering
 
-# skill:
 
-#
+You can then investigate its state, resource usage,
 
-# Application problem
+logs, network connections, etc.
 
-# ↓
 
-# Is the process running?
 
-# ↓
+If necessary, you can also terminate the process:
 
-# What is its PID?
 
-# ↓
 
-# What resources is it using?
+kill 1234
 
-# ↓
 
-# What do the logs say?
 
-# ↓
 
-# What is the actual cause of the problem?
 
-#
+This is the beginning of a fundamental Cloud Engineering
 
-#
+skill:
 
-# The objective is not simply to memorize Linux commands.
 
-# The objective is to understand what is happening inside
 
-# the machine and develop a systematic troubleshooting mindset.
+Application problem
+
+↓
+
+Is the process running?
+
+↓
+
+What is its PID?
+
+↓
+
+What resources is it using?
+
+↓
+
+What do the logs say?
+
+↓
+
+What is the actual cause of the problem?
+
+
+
+
+
+The objective is not simply to memorize Linux commands.
+
+The objective is to understand what is happening inside
+
+the machine and develop a systematic troubleshooting mindset.
 
 
 # ============================================================
@@ -465,15 +470,17 @@
 
 # ============================================================
 
-# Do not look at the answers immediately.
 
-#
+Do not look at the answers immediately.
 
-# Try to reason about each question first.
 
-# The goal is to understand the concepts, not simply memorize
 
-# the answers.
+Try to reason about each question first.
+
+The goal is to understand the concepts, not simply memorize
+
+the answers.
+
 
 # ============================================================
 
@@ -481,21 +488,23 @@
 
 # ============================================================
 
-# When you run:
 
-#
+When you run:
 
-# node app.js
 
-#
 
-# what is the difference between the PROGRAM and the PROCESS?
+node app.js
 
-#
 
-# Think about what exists on disk before you execute the command
 
-# and what the operating system creates when the program starts.
+what is the difference between the PROGRAM and the PROCESS?
+
+
+
+Think about what exists on disk before you execute the command
+
+and what the operating system creates when the program starts.
+
 
 The PROGRAM is the code/instruction stored on disk (eg :app.js)
 The PROCESS is a running instance of that PROGRAM created and managed
@@ -513,21 +522,22 @@ by operating system
 
 # ============================================================
 
-# What is the purpose of a PID?
 
-#
+What is the purpose of a PID?
 
-# Remember:
 
-#
 
-# PID = Process ID
+Remember:
 
-#
 
-# Think about why the operating system needs to identify
 
-# individual processes.
+PID = Process ID
+
+
+
+Think about why the operating system needs to identify
+
+individual processes.
 
 The PID is a unique identifier assigned to a process. 
 It helps operating system and users to identify and manage
@@ -539,21 +549,21 @@ that specific process.
 
 # ============================================================
 
-# Why can:
+Why can:
 
-#
 
-# kill 1234
 
-#
+kill 1234
 
-# stop an application?
 
-#
 
-# Think about the relationship between the PID and the process,
+stop an application?
 
-# and what the "kill" command actually targets.
+
+
+Think about the relationship between the PID and the process,
+
+and what the "kill" command actually targets.
 
 kill 1234 will target the running process with  1234 PID and
 send it a signal to terminate
@@ -566,37 +576,37 @@ send it a signal to terminate
 
 # ============================================================
 
-# In this architecture:
+In this architecture:
 
-#
 
-#
 
-# Node.js
 
-# ↓
 
-# ?
+Node.js
 
-# ↓
+↓
 
-# Kernel
+?
 
-# ↓
+↓
 
-# Hardware
+Kernel
 
-#
+↓
 
-#
+Hardware
 
-# What is missing?
 
-#
 
-# Think about the entity created by the operating system when
 
-# Node.js is running.
+
+What is missing?
+
+
+
+Think about the entity created by the operating system when
+
+Node.js is running.
 
 The missing component is System call
 
@@ -606,29 +616,30 @@ The missing component is System call
 
 # ============================================================
 
-# Do bash, node, and nginx belong to USER SPACE or KERNEL SPACE?
 
-#
+Do bash, node, and nginx belong to USER SPACE or KERNEL SPACE?
 
-# Explain your answer based on the distinction between:
 
-#
 
-# User Space
+Explain your answer based on the distinction between:
 
-# ↓
 
-# System Calls
 
-# ↓
+User Space
 
-# Kernel Space
+↓
 
-#
+System Calls
 
-# Do not just give the answer.
+↓
 
-# Try to explain WHY they belong to that space.
+Kernel Space
+
+
+
+Do not just give the answer.
+
+Try to explain WHY they belong to that space.
 
 Bash, node, and nginx belong to USER SPACE because they are all 
 programs (application and/or interfaces) that run outside the kernel.

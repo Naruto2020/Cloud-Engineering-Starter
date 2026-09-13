@@ -4,45 +4,45 @@
 
 # ============================================================
 
-# We have just finished CPU and RAM.
+We have just finished CPU and RAM.
 
-#
 
-# We now need to understand PROCESSES in more depth,
 
-# followed by SERVICES and LOGS.
+We now need to understand PROCESSES in more depth,
 
-#
+followed by SERVICES and LOGS.
 
-# Our current model is:
 
-#
 
-#
+Our current model is:
 
-# Program
 
-# ↓
 
-# Process
 
-# ↓
 
-# PID
+Program
 
-#
+↓
 
-#
+Process
 
-# We are now going to add another important concept:
+↓
 
-#
+PID
 
-# PPID
 
-#
 
-# PPID stands for Parent Process ID.
+
+
+We are now going to add another important concept:
+
+
+
+PPID
+
+
+
+PPID stands for Parent Process ID.
 
 # ============================================================
 
@@ -50,1004 +50,1004 @@
 
 # ============================================================
 
-# When one process creates another process, we obtain a
+When one process creates another process, we obtain a
 
-# parent/child relationship.
+parent/child relationship.
 
-#
 
-#
 
-# Parent
 
-# │
 
-# ├── Child
+Parent
 
-# │
+│
 
-# └── Child
+├── Child
 
-#
+│
 
-#
+└── Child
 
-# For example:
 
-#
 
-#
 
-# bash
 
-# │
+For example:
 
-# ├── node app.js
 
-# │
 
-# └── sleep 1000
 
-#
 
-#
+bash
 
-# The `sleep` process has:
+│
 
-#
+├── node app.js
 
-# PID  = its own unique process identifier
+│
 
-# PPID = the PID of its parent process (bash)
+└── sleep 1000
 
-#
 
-#
 
-# This is exactly what you were observing with:
 
-#
 
-# ps -p 295 -o pid,ppid,state,%cpu,%mem,cmd
+The `sleep` process has:
 
-#
 
-#
 
-# This command allows you to inspect specific information
+PID  = its own unique process identifier
 
-# about a process, including:
+PPID = the PID of its parent process (bash)
 
-#
 
-# PID   → Process ID
 
-# PPID  → Parent Process ID
 
-# STATE → Current process state
 
-# %CPU  → CPU usage
+This is exactly what you were observing with:
 
-# %MEM  → Memory usage
 
-# CMD   → Command that started the process
 
-# ============================================================
+ps -p 295 -o pid,ppid,state,%cpu,%mem,cmd
 
-# 2. How Does Linux Create a Process?
 
-# ============================================================
 
-# Two concepts are important here:
 
-#
 
-# fork()
+This command allows you to inspect specific information
 
-# exec()
+about a process, including:
 
-#
 
-#
 
-# ------------------------------------------------------------
+PID   → Process ID
 
-# fork()
+PPID  → Parent Process ID
 
-# ------------------------------------------------------------
+STATE → Current process state
 
-#
+%CPU  → CPU usage
 
-# `fork()` creates a new process based on the existing process.
+%MEM  → Memory usage
 
-#
+CMD   → Command that started the process
 
-# Conceptually:
+============================================================
 
-#
+2. How Does Linux Create a Process?
 
-#
+============================================================
 
-# Parent
+Two concepts are important here:
 
-# │
 
-# fork()
 
-# │
+fork()
 
-# ├── Parent
+exec()
 
-# └── Child
 
-#
 
-#
 
-# The child process initially inherits many properties from
 
-# its parent.
+------------------------------------------------------------
 
-# ------------------------------------------------------------
+fork()
 
-# exec()
+------------------------------------------------------------
 
-# ------------------------------------------------------------
 
-# `exec()` replaces the current program inside a process with
 
-# another program.
+`fork()` creates a new process based on the existing process.
 
-#
 
-# Conceptually:
 
-#
+Conceptually:
 
-#
 
-# bash
 
-# │
 
-# fork()
 
-# │
+Parent
 
-# ▼
+│
 
-# New process
+fork()
 
-# │
+│
 
-# exec()
+├── Parent
 
-# ↓
+└── Child
 
-# sleep
 
-#
 
-#
 
-# You do NOT need to know how to program `fork()` or `exec()`
 
-# at this stage.
+The child process initially inherits many properties from
 
-#
+its parent.
 
-# You only need to understand the principle because it explains
+------------------------------------------------------------
 
-# how Linux starts and manages programs.
+exec()
 
-#
+------------------------------------------------------------
 
-# A simplified mental model is:
+`exec()` replaces the current program inside a process with
 
-#
+another program.
 
-#
 
-# Parent process
 
-# ↓
+Conceptually:
 
-# fork()
 
-# ↓
 
-# Child process
 
-# ↓
 
-# exec()
+bash
 
-# ↓
+│
 
-# New program
+fork()
 
-#
+│
 
-#
+▼
 
-# This is an important foundation for understanding how shells
+New process
 
-# launch commands and how processes are created.
+│
 
-# ============================================================
+exec()
 
-# 3. Signals
+↓
 
-# ============================================================
+sleep
 
-# When you run:
 
-#
 
-# kill 295
 
-#
 
-# you are not sending a magical command saying:
+You do NOT need to know how to program `fork()` or `exec()`
 
-#
+at this stage.
 
-# "Kill this program."
 
-#
 
-# You are sending a SIGNAL to the process with PID 295.
+You only need to understand the principle because it explains
 
-#
+how Linux starts and manages programs.
 
-#
 
-# The default signal sent by `kill` is:
 
-#
+A simplified mental model is:
 
-# SIGTERM
 
-#
 
-#
 
-# SIGTERM essentially means:
 
-#
+Parent process
 
-# "Please terminate cleanly."
+↓
 
-#
+fork()
 
-#
+↓
 
-# The process can receive the signal and perform cleanup
+Child process
 
-# before exiting.
+↓
 
-#
+exec()
 
-# For example:
+↓
 
-#
+New program
 
-#
 
-# close files
 
-# close connections
 
-# perform cleanup
 
-# ↓
+This is an important foundation for understanding how shells
 
-# exit
+launch commands and how processes are created.
 
-# ============================================================
+============================================================
 
-# 3.1 SIGTERM vs SIGKILL
+3. Signals
 
-# ============================================================
+============================================================
 
-# ------------------------------------------------------------
+When you run:
 
-# SIGTERM
 
-# ------------------------------------------------------------
 
-# Command:
+kill 295
 
-#
 
-# kill 295
 
-#
+you are not sending a magical command saying:
 
-#
 
-# This sends:
 
-#
+"Kill this program."
 
-# SIGTERM
 
-#
 
-#
+You are sending a SIGNAL to the process with PID 295.
 
-# The process can handle this signal and perform cleanup
 
-# before terminating.
 
-#
 
-#
 
-# kill 295
+The default signal sent by `kill` is:
 
-# ↓
 
-# SIGTERM
 
-# ↓
+SIGTERM
 
-# "Please stop cleanly"
 
-# ↓
 
-# cleanup
 
-# ↓
 
-# exit
+SIGTERM essentially means:
 
-# ------------------------------------------------------------
 
-# SIGKILL
 
-# ------------------------------------------------------------
+"Please terminate cleanly."
 
-# Command:
 
-#
 
-# kill -9 295
 
-#
 
-#
+The process can receive the signal and perform cleanup
 
-# This sends:
+before exiting.
 
-#
 
-# SIGKILL
 
-#
+For example:
 
-#
 
-# SIGKILL cannot be caught, blocked, or handled by the target
 
-# process.
 
-#
 
-# The operating system terminates the process immediately.
+close files
 
-#
+close connections
 
-#
+perform cleanup
 
-# kill -9 295
+↓
 
-# ↓
+exit
 
-# SIGKILL
+============================================================
 
-# ↓
+3.1 SIGTERM vs SIGKILL
 
-# FORCED TERMINATION
+============================================================
 
-#
+------------------------------------------------------------
 
-#
+SIGTERM
 
-# Practical rule:
+------------------------------------------------------------
 
-#
+Command:
 
-# Do not automatically start with:
 
-#
 
-# kill -9
+kill 295
 
-#
 
-#
 
-# In production, a common approach is:
 
-#
 
-# 1. Send SIGTERM
+This sends:
 
-# 2. Give the process time to shut down cleanly
 
-# 3. Investigate if it does not terminate
 
-# 4. Use SIGKILL only when necessary
+SIGTERM
 
-#
 
-#
 
-# This is important because forced termination can prevent
 
-# an application from performing its normal cleanup.
 
-# ============================================================
+The process can handle this signal and perform cleanup
 
-# 4. Process States
+before terminating.
 
-# ============================================================
 
-# You have already seen:
 
-#
 
-# S
 
-#
+kill 295
 
-#
+↓
 
-# Linux processes can have several states.
+SIGTERM
 
-#
+↓
 
-#
+"Please stop cleanly"
 
-# R → Running / Runnable
+↓
 
-# S → Sleeping
+cleanup
 
-# D → Uninterruptible sleep
+↓
 
-# T → Stopped
+exit
 
-# Z → Zombie
+------------------------------------------------------------
 
-#
+SIGKILL
 
-#
+------------------------------------------------------------
 
-# A simplified view:
+Command:
 
-#
 
-#
 
-# R
+kill -9 295
 
-# ↓
 
-# Process is running or ready to run
 
-#
 
-# S
 
-# ↓
+This sends:
 
-# Process is sleeping / waiting
 
-#
 
-# D
+SIGKILL
 
-# ↓
 
-# Process is waiting in an uninterruptible state,
 
-# commonly related to I/O
 
-#
 
-# T
+SIGKILL cannot be caught, blocked, or handled by the target
 
-# ↓
+process.
 
-# Process is stopped
 
-#
 
-# Z
+The operating system terminates the process immediately.
 
-# ↓
 
-# Process has terminated but still has an entry
 
-# in the process table
 
-# ============================================================
 
-# 5. Zombie Processes
+kill -9 295
 
-# ============================================================
+↓
 
-# A ZOMBIE process is a process that has finished executing,
+SIGKILL
 
-# but whose parent has not yet collected its termination
+↓
 
-# status.
+FORCED TERMINATION
 
-#
 
-# Conceptually:
 
-#
 
-#
 
-# Parent
+Practical rule:
 
-# │
 
-# └── Zombie
 
-#
+Do not automatically start with:
 
-#
 
-# The process is no longer actually executing its program.
 
-#
+kill -9
 
-# It remains as an entry in the process table until the parent
 
-# retrieves its termination status.
 
-#
 
-# Therefore:
 
-#
+In production, a common approach is:
 
-# Zombie ≠ CPU-intensive process
 
-#
 
-# A zombie process does not continue consuming CPU to perform
+1. Send SIGTERM
 
-# its original work.
+2. Give the process time to shut down cleanly
 
-#
+3. Investigate if it does not terminate
 
-# The important point is the relationship between the child
+4. Use SIGKILL only when necessary
 
-# process and its parent.
 
-# ============================================================
 
-# 6. Orphan Processes
 
-# ============================================================
 
-# Now consider the opposite situation.
+This is important because forced termination can prevent
 
-#
+an application from performing its normal cleanup.
 
-# Normally:
+============================================================
 
-#
+4. Process States
 
-#
+============================================================
 
-# Parent
+You have already seen:
 
-# │
 
-# └── Child
 
-#
+S
 
-#
 
-# What happens if the parent process terminates while the child
 
-# is still running?
 
-#
 
-#
+Linux processes can have several states.
 
-# Parent ❌
 
-#
 
-# Child
 
-# │
 
-# └── becomes an ORPHAN
+R → Running / Runnable
 
-#
+S → Sleeping
 
-#
+D → Uninterruptible sleep
 
-# The orphan process is then adopted by another process.
+T → Stopped
 
-#
+Z → Zombie
 
-# On modern Linux systems, this is typically associated with
 
-# PID 1, although the exact re-parenting mechanism can depend
 
-# on the process hierarchy and environment.
 
-#
 
-# This brings us to a very important process:
+A simplified view:
 
-# ============================================================
 
-# 7. PID 1
 
-# ============================================================
 
-# PID 1 is a special process in a Linux system.
 
-#
+R
 
-# On a typical Linux distribution using systemd:
+↓
 
-#
+Process is running or ready to run
 
-#
 
-# PID 1 = systemd
 
-#
+S
 
-#
+↓
 
-# You can inspect PID 1 with:
+Process is sleeping / waiting
 
-#
 
-# ps -p 1 -f
 
-#
+D
 
-#
+↓
 
-# You may see something similar to:
+Process is waiting in an uninterruptible state,
 
-#
+commonly related to I/O
 
-#
 
-# root         1       0  ... /sbin/init
 
-#
+T
 
-#
+↓
 
-# or a command/path associated with systemd.
+Process is stopped
 
-#
 
-#
 
-# PID 1 has a special role in the system and is responsible
+Z
 
-# for important parts of the system's process and service
+↓
 
-# management.
+Process has terminated but still has an entry
 
-#
+in the process table
 
-# Understanding PID 1 will become particularly useful when we
+============================================================
 
-# move on to:
+5. Zombie Processes
 
-#
+============================================================
 
-# systemd
+A ZOMBIE process is a process that has finished executing,
 
-# services
+but whose parent has not yet collected its termination
 
-# service dependencies
+status.
 
-# logs
 
-# system startup
 
-#
+Conceptually:
 
-#
 
-# The important mental model for now is:
 
-#
 
-#
 
-# Process
+Parent
 
-# │
+│
 
-# ├── PID
+└── Zombie
 
-# │
 
-# ├── PPID
 
-# │
 
-# ├── State
 
-# │
+The process is no longer actually executing its program.
 
-# └── Signals
 
-#
 
-#
+It remains as an entry in the process table until the parent
 
-# These concepts allow us to understand not only that a process
+retrieves its termination status.
 
-# exists, but also how it was created, who its parent is, what
 
-# state it is in, and how Linux can communicate with it.
 
+Therefore:
 
 
-# ============================================================
 
-# What You Should Have in Mind Now
+Zombie ≠ CPU-intensive process
 
-# ============================================================
 
-# At this point, you should have the following mental model
 
-# of processes on a Linux system:
+A zombie process does not continue consuming CPU to perform
 
-#
+its original work.
 
-#
 
-# Linux
 
-# │
+The important point is the relationship between the child
 
-# PID 1
+process and its parent.
 
-# │
+============================================================
 
-# systemd
+6. Orphan Processes
 
-# │
+============================================================
 
-# ┌────┴────┐
+Now consider the opposite situation.
 
-# │         │
 
-# bash       sshd
 
-# │
+Normally:
 
-# ┌───┴────┐
 
-# │        │
 
-# node     sleep
 
-#
 
-#
+Parent
 
-# Linux manages a hierarchy of processes.
+│
 
-#
+└── Child
 
-# A process can create child processes, which creates a
 
-# parent/child relationship represented by the PID and PPID.
 
-# ============================================================
 
-# Process Information
 
-# ============================================================
+What happens if the parent process terminates while the child
 
-# Every process has several important attributes, including:
+is still running?
 
-#
 
-#
 
-# PID
 
-# PPID
 
-# STATE
+Parent ❌
 
-# CPU
 
-# RAM
 
-#
+Child
 
-#
+│
 
-# PID:
+└── becomes an ORPHAN
 
-# Process ID.
 
-# The unique identifier of the process.
 
-#
 
-# PPID:
 
-# Parent Process ID.
+The orphan process is then adopted by another process.
 
-# The PID of the process that created or launched it.
 
-#
 
-# STATE:
+On modern Linux systems, this is typically associated with
 
-# The current state of the process.
+PID 1, although the exact re-parenting mechanism can depend
 
-#
+on the process hierarchy and environment.
 
-# CPU:
 
-# The amount of CPU resources being used by the process.
 
-#
+This brings us to a very important process:
 
-# RAM:
+============================================================
 
-# The amount of memory being used by the process.
+7. PID 1
 
-# ============================================================
+============================================================
 
-# Communication with the System
+PID 1 is a special process in a Linux system.
 
-# ============================================================
 
-# Processes interact with the operating system through
 
-# mechanisms such as:
+On a typical Linux distribution using systemd:
 
-#
 
-# System Calls
 
-# Signals
 
-#
 
-#
+PID 1 = systemd
 
-# SYSTEM CALLS allow a program to request services from
 
-# the kernel.
 
-#
 
-# For example, a program may need to:
 
-#
+You can inspect PID 1 with:
 
-# - Read a file
 
-# - Write to a file
 
-# - Allocate memory
+ps -p 1 -f
 
-# - Create a process
 
-# - Open a network connection
 
-#
 
-#
 
-# The general idea is:
+You may see something similar to:
 
-#
 
-#
 
-# Application
 
-# │
 
-# │ System Call
+root         1       0  ... /sbin/init
 
-# ▼
 
-# Kernel
 
-# │
 
-# ▼
 
-# Hardware
+or a command/path associated with systemd.
 
-#
 
-#
 
-# SIGNALS allow the operating system or another process
 
-# to notify a process about an event or request an action.
 
-#
+PID 1 has a special role in the system and is responsible
 
-# For example:
+for important parts of the system's process and service
 
-#
+management.
 
-#
 
-# kill PID
 
-# │
+Understanding PID 1 will become particularly useful when we
 
-# ▼
+move on to:
 
-# SIGTERM
 
-# │
 
-# ▼
+systemd
 
-# Process
+services
 
-#
+service dependencies
 
-#
+logs
 
-# The key concepts to remember are:
+system startup
 
-#
 
-#
 
-# Program
 
-# ↓
 
-# Process
+The important mental model for now is:
 
-# ↓
 
-# PID / PPID / STATE
 
-# ↓
 
-# CPU / RAM / Resources
 
-# ↓
+Process
 
-# System Calls + Signals
+│
 
-# ↓
+├── PID
 
-# Kernel
+│
 
-#
+├── PPID
 
-#
+│
 
-# This mental model will be useful when we move on to
+├── State
 
-# Linux services, systemd, logs, and troubleshooting.
+│
+
+└── Signals
+
+
+
+
+
+These concepts allow us to understand not only that a process
+
+exists, but also how it was created, who its parent is, what
+
+state it is in, and how Linux can communicate with it.
+
+
+
+============================================================
+
+What You Should Have in Mind Now
+
+============================================================
+
+At this point, you should have the following mental model
+
+of processes on a Linux system:
+
+
+
+
+
+Linux
+
+│
+
+PID 1
+
+│
+
+systemd
+
+│
+
+┌────┴────┐
+
+│         │
+
+bash       sshd
+
+│
+
+┌───┴────┐
+
+│        │
+
+node     sleep
+
+
+
+
+
+Linux manages a hierarchy of processes.
+
+
+
+A process can create child processes, which creates a
+
+parent/child relationship represented by the PID and PPID.
+
+============================================================
+
+Process Information
+
+============================================================
+
+Every process has several important attributes, including:
+
+
+
+
+
+PID
+
+PPID
+
+STATE
+
+CPU
+
+RAM
+
+
+
+
+
+PID:
+
+Process ID.
+
+The unique identifier of the process.
+
+
+
+PPID:
+
+Parent Process ID.
+
+The PID of the process that created or launched it.
+
+
+
+STATE:
+
+The current state of the process.
+
+
+
+CPU:
+
+The amount of CPU resources being used by the process.
+
+
+
+RAM:
+
+The amount of memory being used by the process.
+
+============================================================
+
+Communication with the System
+
+============================================================
+
+Processes interact with the operating system through
+
+mechanisms such as:
+
+
+
+System Calls
+
+Signals
+
+
+
+
+
+SYSTEM CALLS allow a program to request services from
+
+the kernel.
+
+
+
+For example, a program may need to:
+
+
+
+- Read a file
+
+- Write to a file
+
+- Allocate memory
+
+- Create a process
+
+- Open a network connection
+
+
+
+
+
+The general idea is:
+
+
+
+
+
+Application
+
+│
+
+│ System Call
+
+▼
+
+Kernel
+
+│
+
+▼
+
+Hardware
+
+
+
+
+
+SIGNALS allow the operating system or another process
+
+to notify a process about an event or request an action.
+
+
+
+For example:
+
+
+
+
+
+kill PID
+
+│
+
+▼
+
+SIGTERM
+
+│
+
+▼
+
+Process
+
+
+
+
+
+The key concepts to remember are:
+
+
+
+
+
+Program
+
+↓
+
+Process
+
+↓
+
+PID / PPID / STATE
+
+↓
+
+CPU / RAM / Resources
+
+↓
+
+System Calls + Signals
+
+↓
+
+Kernel
+
+
+
+
+
+This mental model will be useful when we move on to
+
+Linux services, systemd, logs, and troubleshooting.

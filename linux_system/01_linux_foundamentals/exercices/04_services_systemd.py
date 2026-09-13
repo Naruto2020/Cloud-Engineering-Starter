@@ -1,140 +1,140 @@
-# ============================================================
-# 1.6 — Linux Services and `systemd`
-# ============================================================
+============================================================
+1.6 — Linux Services and `systemd`
+============================================================
 
-# So far, we have started applications manually:
-#
-# node app.js
+So far, we have started applications manually:
 
-# The problem is that on a real server, we do not necessarily
-# want to open a terminal and start the application manually.
+node app.js
 
-# We want Linux to be able to:
-#
-# - start the application automatically;
-# - monitor it;
-# - restart it if necessary;
-# - manage its logs;
-# - stop it cleanly;
-# - run it as a specific user.
-#
-# This is one of the main roles of `systemd`.
+The problem is that on a real server, we do not necessarily
+want to open a terminal and start the application manually.
 
+We want Linux to be able to:
 
-# ============================================================
-# 1. What is `systemd`?
-# ============================================================
+- start the application automatically;
+- monitor it;
+- restart it if necessary;
+- manage its logs;
+- stop it cleanly;
+- run it as a specific user.
 
-# On many modern Linux distributions:
-#
-# Linux
-#   │
-#   └── systemd
-#         │
-#         ├── nginx
-#         ├── ssh
-#         ├── cron
-#         └── other services
-
-# `systemd` is, among other things, the init system
-# and service manager.
-
-# You can check PID 1 with:
-#
-# ps -p 1 -f
-
-# On a system using `systemd`, you will generally see
-# `systemd` or an init process associated with `systemd`.
+This is one of the main roles of `systemd`.
 
 
-# ============================================================
-# 2. Service vs Process
-# ============================================================
+============================================================
+1. What is `systemd`?
+============================================================
 
-# This is an important distinction.
+On many modern Linux distributions:
 
-# A process:
-#
-# node app.js
-#     ↓
-# PID 1234
-#
-# is an instance of a program that is currently running.
+Linux
+  │
+  └── systemd
+        │
+        ├── nginx
+        ├── ssh
+        ├── cron
+        └── other services
 
-# A service represents an application or functionality
-# that the system is responsible for managing.
+`systemd` is, among other things, the init system
+and service manager.
 
-# For example:
-#
-# Service: nginx
-#       ↓
-# nginx process
-#       ↓
-# PID(s)
+You can check PID 1 with:
 
-# So:
-#
-# The service is managed by systemd;
-# the service runs one or more processes.
+ps -p 1 -f
+
+On a system using `systemd`, you will generally see
+`systemd` or an init process associated with `systemd`.
 
 
-# ============================================================
-# 3. First Command: `systemctl`
-# ============================================================
+============================================================
+2. Service vs Process
+============================================================
 
-# The main command used to interact with systemd is:
-#
-# systemctl
+This is an important distinction.
 
-# To check the status of a service:
-#
-# systemctl status nginx
+A process:
 
-# You can try this with a service available on your machine.
+node app.js
+    ↓
+PID 1234
 
-# Start by listing all currently loaded services:
-#
-# systemctl list-units --type=service
+is an instance of a program that is currently running.
 
-# You will see a list similar to:
-#
-# UNIT                     LOAD   ACTIVE   SUB
-# ssh.service              loaded active   running
-# systemd-journald.service loaded active   running
-# ...
+A service represents an application or functionality
+that the system is responsible for managing.
 
-# ============================================================
-# 4. `active`, `inactive`, `failed`
-# ============================================================
+For example:
 
-# A service can be in several states, including:
-#
-# active
-# inactive
-# failed
+Service: nginx
+      ↓
+nginx process
+      ↓
+PID(s)
 
-# For example:
-#
-# nginx.service
-#     ↓
-# active (running)
-#
-# means that the service is currently running.
+So:
 
-# On the other hand:
-#
-# nginx.service
-#     ↓
-# failed
-#
-# means that there was a problem with the service.
+The service is managed by systemd;
+the service runs one or more processes.
 
 
-# ============================================================
-# 5. Essential Commands
-# ============================================================
+============================================================
+3. First Command: `systemctl`
+============================================================
 
-# You should know these commands:
+The main command used to interact with systemd is:
+
+systemctl
+
+To check the status of a service:
+
+systemctl status nginx
+
+You can try this with a service available on your machine.
+
+Start by listing all currently loaded services:
+
+systemctl list-units --type=service
+
+You will see a list similar to:
+
+UNIT                     LOAD   ACTIVE   SUB
+ssh.service              loaded active   running
+systemd-journald.service loaded active   running
+...
+
+============================================================
+4. `active`, `inactive`, `failed`
+============================================================
+
+A service can be in several states, including:
+
+active
+inactive
+failed
+
+For example:
+
+nginx.service
+    ↓
+active (running)
+
+means that the service is currently running.
+
+On the other hand:
+
+nginx.service
+    ↓
+failed
+
+means that there was a problem with the service.
+
+
+============================================================
+5. Essential Commands
+============================================================
+
+You should know these commands:
 
 # Check the status:
 
@@ -161,109 +161,109 @@ sudo systemctl enable nginx
 sudo systemctl disable nginx
 
 
-# ============================================================
-# 6. Logs
-# ============================================================
+============================================================
+6. Logs
+============================================================
 
-# And now we reach another essential element.
+And now we reach another essential element.
 
-# You run:
-#
-# systemctl status nginx
-#
-# and you see:
-#
-# Active: failed
+You run:
 
-# The next question is immediately:
-#
-# Why?
+systemctl status nginx
 
-# You are going to check the logs.
+and you see:
 
-# With systemd:
-#
-# journalctl
+Active: failed
 
-# For a specific service:
-#
-# journalctl -u nginx
+The next question is immediately:
 
-# To follow new logs in real time:
-#
-# journalctl -u nginx -f
+Why?
 
-# The `-f` means "follow".
+You are going to check the logs.
 
-# Conceptually, this is similar to:
-#
-# tail -f
+With systemd:
+
+journalctl
+
+For a specific service:
+
+journalctl -u nginx
+
+To follow new logs in real time:
+
+journalctl -u nginx -f
+
+The `-f` means "follow".
+
+Conceptually, this is similar to:
+
+tail -f
 
 
-# ============================================================
-# 🧠 The Cloud Engineer Mindset
-# ============================================================
+============================================================
+🧠 The Cloud Engineer Mindset
+============================================================
 
-# Imagine this situation:
-#
-# User
-#     ↓
-# Load Balancer
-#     ↓
-# Server
-#     ↓
-# Node.js
-#     ↓
-# ❌
+Imagine this situation:
 
-# You do not immediately start modifying the code.
+User
+    ↓
+Load Balancer
+    ↓
+Server
+    ↓
+Node.js
+    ↓
+❌
 
-# You diagnose the problem step by step:
-#
-# 1. Is the machine working?
-#        ↓
-# 2. Does the process exist?
-#        ↓
-# 3. Is the service active?
-#        ↓
-# 4. Is the port listening?
-#        ↓
-# 5. What do the logs say?
-#        ↓
-# 6. What about CPU / RAM?
-#        ↓
-# 7. What about the network?
+You do not immediately start modifying the code.
 
-# The tools start fitting together:
-#
-# ps
-#  ↓
-# processes
-#
-# systemctl
-#  ↓
-# services
-#
-# journalctl
-#  ↓
-# logs
-#
-# top
-#  ↓
-# CPU / RAM
-#
+You diagnose the problem step by step:
+
+1. Is the machine working?
+       ↓
+2. Does the process exist?
+       ↓
+3. Is the service active?
+       ↓
+4. Is the port listening?
+       ↓
+5. What do the logs say?
+       ↓
+6. What about CPU / RAM?
+       ↓
+7. What about the network?
+
+The tools start fitting together:
+
+ps
+ ↓
+processes
+
+systemctl
+ ↓
+services
+
+journalctl
+ ↓
+logs
+
+top
+ ↓
+CPU / RAM
+
 `Restart=on-failure`# ss
-#  ↓
-# ports / sockets
+ ↓
+ports / sockets
 
-# This combination is what starts building
-# real Linux / Cloud engineering skills.
+This combination is what starts building
+real Linux / Cloud engineering skills.
 
-# ============================================================
-# 🎯 Questions
-# ============================================================
+============================================================
+🎯 Questions
+============================================================
 
-# Before going further, answer these 6 questions:
+Before going further, answer these 6 questions:
 
 1. What is the difference between a process and a service?
 
@@ -293,11 +293,11 @@ While enable will prepare it to be launch when OS restart
 `Restart=on-failure` is useful because it help to restart
 a server automaticaly if it crashes or exit with an error
 
-# ============================================================
-# Next Step
-# ============================================================
+============================================================
+Next Step
+============================================================
 
-# Next, we will study Linux logs in depth.
-#
-# After that, we will be able to complete
-# the Linux fundamentals block.
+Next, we will study Linux logs in depth.
+
+After that, we will be able to complete
+the Linux fundamentals block.

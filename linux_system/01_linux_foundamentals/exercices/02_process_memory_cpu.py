@@ -4,131 +4,133 @@
 
 # ============================================================
 
-# We now move on to the second part:
 
-#
+We now move on to the second part:
 
-# PROCESSES, MEMORY AND CPU
 
-#
 
-# This is a very important topic for a Cloud Engineer because
+PROCESSES, MEMORY AND CPU
 
-# many production problems can be reduced to questions such as:
 
-#
 
-# CPU overloaded?
+This is a very important topic for a Cloud Engineer because
 
-# RAM overloaded?
+many production problems can be reduced to questions such as:
 
-# Too many processes?
 
-# Process blocked?
 
-#
+CPU overloaded?
 
-# The goal is to understand what a running process actually
+RAM overloaded?
 
-# consumes and how Linux manages CPU and memory resources.
+Too many processes?
 
-# ============================================================
+Process blocked?
 
-# 1. A Process — What Does It Actually Consume?
 
-# ============================================================
 
-# We have already seen:
+The goal is to understand what a running process actually
 
-#
+consumes and how Linux manages CPU and memory resources.
 
-#
+============================================================
 
-# Program
+1. A Process — What Does It Actually Consume?
 
-# ↓
+============================================================
 
-# Execution
+We have already seen:
 
-# ↓
 
-# Process
 
-#
 
-#
 
-# But a process is not simply "code that is running".
+Program
 
-#
+↓
 
-# When Linux creates a process, it associates several
+Execution
 
-# important pieces of information with it:
+↓
 
-#
+Process
 
-#
 
-# ┌─────────────────────────┐
 
-# │       Process           │
 
-# ├─────────────────────────┤
 
-# │ PID                     │
+But a process is not simply "code that is running".
 
-# │ Memory                  │
 
-# │ CPU                     │
 
-# │ Open files              │
+When Linux creates a process, it associates several
 
-# │ Permissions             │
+important pieces of information with it:
 
-# │ State                   │
 
-# │ Parent process          │
 
-# └─────────────────────────┘
 
-#
 
-#
+┌─────────────────────────┐
 
-# For example:
+│       Process           │
 
-#
+├─────────────────────────┤
 
-# node app.js
+│ PID                     │
 
-#
+│ Memory                  │
 
-# could result in:
+│ CPU                     │
 
-#
+│ Open files              │
 
-#
+│ Permissions             │
 
-# PID  = 1234
+│ State                   │
 
-# RAM  = 150 MB
+│ Parent process          │
 
-# CPU  = 5%
+└─────────────────────────┘
 
-# PPID = 800
 
-#
 
-#
 
-# PPID stands for Parent Process ID.
 
-#
+For example:
 
-# It identifies the process that created or launched this
 
-# process.
+
+node app.js
+
+
+
+could result in:
+
+
+
+
+
+PID  = 1234
+
+RAM  = 150 MB
+
+CPU  = 5%
+
+PPID = 800
+
+
+
+
+
+PPID stands for Parent Process ID.
+
+
+
+It identifies the process that created or launched this
+
+process.
+
 
 # ============================================================
 
@@ -136,75 +138,77 @@
 
 # ============================================================
 
-# The CPU executes instructions.
 
-#
+The CPU executes instructions.
 
-# In a very simplified representation:
 
-#
 
-#
+In a very simplified representation:
 
-# Process A ─┐
 
-# Process B ─┼──► CPU
 
-# Process C ─┘
 
-#
 
-#
+Process A ─┐
 
-# A single CPU core cannot literally execute all processes
+Process B ─┼──► CPU
 
-# simultaneously.
+Process C ─┘
 
-#
 
-# Linux therefore uses a SCHEDULER.
 
-#
 
-# The scheduler decides which process gets CPU time.
 
-#
+A single CPU core cannot literally execute all processes
 
-#
+simultaneously.
 
-# Process A
 
-# ↓
 
-# Process B
+Linux therefore uses a SCHEDULER.
 
-# ↓
 
-# Process C
 
-# ↓
+The scheduler decides which process gets CPU time.
 
-# Process A
 
-# ↓
 
-# ...
 
-#
 
-#
+Process A
 
-# These switches happen extremely quickly, creating the
+↓
 
-# impression that multiple processes are running at the same
+Process B
 
-# time.
+↓
 
-#
+Process C
 
-# On a machine with multiple CPU cores, multiple instructions
+↓
 
-# can actually be executed in parallel.
+Process A
+
+↓
+
+...
+
+
+
+
+
+These switches happen extremely quickly, creating the
+
+impression that multiple processes are running at the same
+
+time.
+
+
+
+On a machine with multiple CPU cores, multiple instructions
+
+can actually be executed in parallel.
+
 
 # ============================================================
 
@@ -212,61 +216,63 @@
 
 # ============================================================
 
-# When you run:
 
-#
+When you run:
 
-# ps aux
 
-#
 
-# you can see information such as:
+ps aux
 
-#
 
-#
 
-# USER   PID   %CPU   %MEM   COMMAND
+you can see information such as:
 
-#
 
-#
 
-# For example:
 
-#
 
-#
+USER   PID   %CPU   %MEM   COMMAND
 
-# steve  1234  85.0   4.2    node app.js
 
-#
 
-#
 
-# This indicates that the process is currently using a
 
-# significant amount of CPU.
+For example:
 
-#
 
-# However, the exact interpretation of %CPU depends on factors
 
-# such as:
 
-#
 
-# - The number of CPU cores
+steve  1234  85.0   4.2    node app.js
 
-# - The operating system
 
-# - The tool being used
 
-# - How CPU usage is measured
 
-#
 
-# Therefore, %CPU should always be interpreted in context.
+This indicates that the process is currently using a
+
+significant amount of CPU.
+
+
+
+However, the exact interpretation of %CPU depends on factors
+
+such as:
+
+
+
+- The number of CPU cores
+
+- The operating system
+
+- The tool being used
+
+- How CPU usage is measured
+
+
+
+Therefore, %CPU should always be interpreted in context.
+
 
 # ============================================================
 
@@ -274,67 +280,69 @@
 
 # ============================================================
 
-# RAM contains data and instructions that programs need while
 
-# they are running.
+RAM contains data and instructions that programs need while
 
-#
+they are running.
 
-# A simplified representation could look like this:
 
-#
 
-#
+A simplified representation could look like this:
 
-# RAM
 
-# ┌────────────────────────────┐
 
-# │ Linux Kernel               │
 
-# ├────────────────────────────┤
 
-# │ Node.js                    │
+RAM
 
-# │                            │
+┌────────────────────────────┐
 
-# │ app.js                     │
+│ Linux Kernel               │
 
-# │ variables                  │
+├────────────────────────────┤
 
-# │ objects                    │
+│ Node.js                    │
 
-# ├────────────────────────────┤
+│                            │
 
-# │ nginx                      │
+│ app.js                     │
 
-# ├────────────────────────────┤
+│ variables                  │
 
-# │ PostgreSQL                 │
+│ objects                    │
 
-# └────────────────────────────┘
+├────────────────────────────┤
 
-#
+│ nginx                      │
 
-#
+├────────────────────────────┤
 
-# For example, if your program contains:
+│ PostgreSQL                 │
 
-#
+└────────────────────────────┘
 
-# const users = [];
 
-#
 
-# and continuously adds a large amount of data to `users`,
 
-# the program will consume more memory.
 
-#
+For example, if your program contains:
 
-# This is why memory usage is an important resource to monitor
 
-# in production.
+
+const users = [];
+
+
+
+and continuously adds a large amount of data to `users`,
+
+the program will consume more memory.
+
+
+
+This is why memory usage is an important resource to monitor
+
+in production.
+
 
 # ============================================================
 
@@ -342,81 +350,83 @@
 
 # ============================================================
 
-# This is a very important production scenario.
 
-#
+This is a very important production scenario.
 
-# Imagine:
 
-#
 
-#
+Imagine:
 
-# RAM = 8 GB
 
-#
 
-# Node.js      3 GB
 
-# PostgreSQL   2 GB
 
-# Nginx        500 MB
+RAM = 8 GB
 
-# Linux        1 GB
 
-# Other        1 GB
 
-# --------------------
+Node.js      3 GB
 
-# Total        7.5 GB
+PostgreSQL   2 GB
 
-#
+Nginx        500 MB
 
-#
+Linux        1 GB
 
-# Then Node.js consumes another 1 GB.
+Other        1 GB
 
-#
+--------------------
 
-# The system is now under severe memory pressure.
+Total        7.5 GB
 
-#
 
-# Linux can use SWAP as an additional mechanism for handling
 
-# memory pressure.
 
-#
 
-#
+Then Node.js consumes another 1 GB.
 
-# RAM
 
-# │
 
-# │ almost full
+The system is now under severe memory pressure.
 
-# ▼
 
-# Swap
 
-# │
+Linux can use SWAP as an additional mechanism for handling
 
-# ▼
+memory pressure.
 
-# Disk
 
-#
 
-#
 
-# However, disk storage is much slower than RAM.
 
-#
+RAM
 
-# Therefore, a machine that is heavily relying on swap can
+│
 
-# become extremely slow.
+│ almost full
+
+▼
+
+Swap
+
+│
+
+▼
+
+Disk
+
+
+
+
+
+However, disk storage is much slower than RAM.
+
+
+
+Therefore, a machine that is heavily relying on swap can
+
+become extremely slow.
+
 
 # ============================================================
 
@@ -424,55 +434,57 @@
 
 # ============================================================
 
-# Conceptually:
 
-#
+Conceptually:
 
-#
 
-# FAST
 
-# ▲
 
-# │
 
-# RAM
+FAST
 
-# │
+▲
 
-# ▼
+│
 
-# SWAP
+RAM
 
-# │
+│
 
-# ▼
+▼
 
-# DISK
+SWAP
 
-# SLOW
+│
 
-#
+▼
 
-#
+DISK
 
-# Swap allows the operating system to move certain memory
+SLOW
 
-# pages from RAM to disk in order to free physical memory.
 
-#
 
-# But:
 
-#
 
-# SWAP IS NOT A HIGH-PERFORMANCE REPLACEMENT FOR RAM.
+Swap allows the operating system to move certain memory
 
-#
+pages from RAM to disk in order to free physical memory.
 
-# In a Cloud environment, heavy or continuous swapping is often
 
-# a signal that memory usage should be investigated.
+
+But:
+
+
+
+SWAP IS NOT A HIGH-PERFORMANCE REPLACEMENT FOR RAM.
+
+
+
+In a Cloud environment, heavy or continuous swapping is often
+
+a signal that memory usage should be investigated.
+
 
 # ============================================================
 
@@ -480,71 +492,73 @@
 
 # ============================================================
 
-# One useful command is:
 
-#
+One useful command is:
 
-# free -h
 
-#
 
-# You may see something similar to:
+free -h
 
-#
 
-#
 
-# total   used   free   shared  buff/cache  available
+You may see something similar to:
 
-# Mem:           7.7G    3.2G   1.5G    200M       3.0G       4.1G
 
-# Swap:          2.0G    100M   1.9G
 
-#
 
-#
 
-# Important values include:
+total   used   free   shared  buff/cache  available
 
-#
+Mem:           7.7G    3.2G   1.5G    200M       3.0G       4.1G
 
-# total
+Swap:          2.0G    100M   1.9G
 
-# used
 
-# available
 
-# swap
 
-#
 
-#
+Important values include:
 
-# IMPORTANT:
 
-#
 
-# Do not look only at:
+total
 
-#
+used
 
-# free
+available
 
-#
+swap
 
-#
 
-# Linux intentionally uses some RAM for filesystem caches and
 
-# other purposes.
 
-#
 
-# Therefore, `available` is often more useful for understanding
+IMPORTANT:
 
-# how much memory can realistically be allocated to new
 
-# applications without significant memory pressure.
+
+Do not look only at:
+
+
+
+free
+
+
+
+
+
+Linux intentionally uses some RAM for filesystem caches and
+
+other purposes.
+
+
+
+Therefore, `available` is often more useful for understanding
+
+how much memory can realistically be allocated to new
+
+applications without significant memory pressure.
+
 
 # ============================================================
 
@@ -552,67 +566,68 @@
 
 # ============================================================
 
-# One of the most important commands for monitoring a Linux
 
-# system is:
+One of the most important commands for monitoring a Linux
 
-#
+system is:
 
-# top
 
-#
 
-# It provides a dynamic view of processes and system resources.
+top
 
-#
 
-# For example:
 
-#
+It provides a dynamic view of processes and system resources.
 
-#
 
-# top - 15:30:10 up 2 days
 
-# Tasks: 150 total
+For example:
 
-# %Cpu(s): 12.5 us, 3.2 sy, ...
 
-# MiB Mem : 7900 total, ...
 
-#
 
-#
 
-# You can then see individual processes:
+top - 15:30:10 up 2 days
 
-#
+Tasks: 150 total
 
-#
+%Cpu(s): 12.5 us, 3.2 sy, ...
 
-# PID    USER      %CPU   %MEM   COMMAND
+MiB Mem : 7900 total, ...
 
-# 1234   steve      80.0    5.2   node
 
-# 500    root        2.0    1.1   nginx
 
-# 700    postgres    1.5    8.0   postgres
 
-#
 
-#
+You can then see individual processes:
 
-# You can immediately start asking:
 
-#
 
-# Why is Node.js using 80% of the CPU?
 
-#
 
-# This is exactly the kind of question a Cloud Engineer must
+PID    USER      %CPU   %MEM   COMMAND
 
-# learn to investigate.
+1234   steve      80.0    5.2   node
+
+500    root        2.0    1.1   nginx
+
+700    postgres    1.5    8.0   postgres
+
+
+
+
+
+You can immediately start asking:
+
+
+
+Why is Node.js using 80% of the CPU?
+
+
+
+This is exactly the kind of question a Cloud Engineer must
+
+learn to investigate.
 
 # ============================================================
 
@@ -620,9 +635,10 @@
 
 # ============================================================
 
-# It is important to distinguish CPU problems from memory
+It is important to distinguish CPU problems from memory
 
-# problems.
+problems.
+
 
 # ------------------------------------------------------------
 
@@ -632,39 +648,40 @@
 
 #
 
-# CPU : 99%
+CPU : 99%
 
-# RAM : 30%
+RAM : 30%
 
-#
 
-#
 
-# This could indicate a CPU-bound workload.
 
-#
 
-# For example:
+This could indicate a CPU-bound workload.
 
-#
 
-#
 
-# while (true) {
+For example:
 
-# // CPU-intensive calculation
 
-# }
 
-#
 
-#
 
-# The program continuously performs calculations and therefore
+while (true) {
 
-# consumes a significant amount of CPU while potentially using
+// CPU-intensive calculation
 
-# relatively little RAM.
+}
+
+
+
+
+
+The program continuously performs calculations and therefore
+
+consumes a significant amount of CPU while potentially using
+
+relatively little RAM.
+
 
 # ------------------------------------------------------------
 
@@ -672,55 +689,55 @@
 
 # ------------------------------------------------------------
 
-#
 
-# CPU : 10%
 
-# RAM : 98%
+CPU : 10%
 
-#
+RAM : 98%
 
-#
 
-# This could indicate a memory-related problem.
 
-#
 
-# For example:
 
-#
+This could indicate a memory-related problem.
 
-#
 
-# const data = [];
 
-#
+For example:
 
-# while (true) {
 
-# data.push("huge amount of data");
 
-# }
 
-#
 
-#
+const data = [];
 
-# The amount of memory used by the program can continuously
 
-# increase.
 
-#
+while (true) {
 
-# Eventually, this can contribute to an:
+data.push("huge amount of data");
 
-#
+}
 
-# OUT OF MEMORY (OOM)
 
-#
 
-# condition.
+
+
+The amount of memory used by the program can continuously
+
+increase.
+
+
+
+Eventually, this can contribute to an:
+
+
+
+OUT OF MEMORY (OOM)
+
+
+
+condition.
 
 # ============================================================
 
@@ -728,111 +745,111 @@
 
 # ============================================================
 
-# Linux has a mechanism called the:
+Linux has a mechanism called the:
 
-#
 
-# OOM KILLER
 
-#
+OOM KILLER
 
-# OOM stands for:
 
-#
 
-# Out Of Memory
+OOM stands for:
 
-#
 
-#
 
-# If the system experiences severe memory pressure and cannot
+Out Of Memory
 
-# satisfy memory allocations, Linux may select processes to
 
-# terminate in order to reclaim memory.
 
-#
 
-# Conceptually:
 
-#
+If the system experiences severe memory pressure and cannot
 
-#
+satisfy memory allocations, Linux may select processes to
 
-# PostgreSQL
+terminate in order to reclaim memory.
 
-# ↓
 
-# High memory usage
 
-#
+Conceptually:
 
-# Node.js
 
-# ↓
 
-# High memory usage
 
-#
 
-# RAM
+PostgreSQL
 
-# ↓
+↓
 
-# FULL
+High memory usage
 
-# ↓
 
-# OOM
 
-# ↓
+Node.js
 
-# Linux terminates a process
+↓
 
-#
+High memory usage
 
-#
 
-# As a result, an application can suddenly disappear or stop
 
-# working without being explicitly stopped by an administrator.
+RAM
 
-#
+↓
 
-# In production environments, this is a very important
+FULL
 
-# situation to diagnose.
+↓
 
-#
+OOM
 
-# A Cloud Engineer should therefore be able to investigate:
+↓
 
-#
+Linux terminates a process
 
-# - Which process consumed the memory?
 
-# - How much memory was available?
 
-# - Was swap being used?
 
-# - Did the system trigger the OOM Killer?
 
-# - Which process was terminated?
+As a result, an application can suddenly disappear or stop
 
-# - What caused memory usage to grow?
+working without being explicitly stopped by an administrator.
 
-#
 
-# The objective is not simply to observe that the server is
 
-# "slow" or "out of memory".
+In production environments, this is a very important
 
-#
+situation to diagnose.
 
-# The objective is to identify the resource under pressure,
 
-# understand why it is under pressure, and find the root cause.
+
+A Cloud Engineer should therefore be able to investigate:
+
+
+
+- Which process consumed the memory?
+
+- How much memory was available?
+
+- Was swap being used?
+
+- Did the system trigger the OOM Killer?
+
+- Which process was terminated?
+
+- What caused memory usage to grow?
+
+
+
+The objective is not simply to observe that the server is
+
+"slow" or "out of memory".
+
+
+
+The objective is to identify the resource under pressure,
+
+understand why it is under pressure, and find the root cause.
 
 
 
@@ -843,13 +860,13 @@
 
 # ============================================================
 
-# After running the commands, answer the following questions.
+After running the commands, answer the following questions.
 
-#
 
-# Try to answer them using your own understanding of the
 
-# concepts covered in this module.
+Try to answer them using your own understanding of the
+
+concepts covered in this module.
 
 # ============================================================
 
@@ -857,17 +874,17 @@
 
 # ============================================================
 
-# What is the difference between CPU and RAM?
+What is the difference between CPU and RAM?
 
-#
 
-# Think about the role of each resource:
 
-#
+Think about the role of each resource:
 
-# CPU → ?
 
-# RAM → ?
+
+CPU → ?
+
+RAM → ?
 
 CPU executes programs.
 RAM stores programs data
@@ -878,25 +895,25 @@ RAM stores programs data
 
 # ============================================================
 
-# If you see:
+If you see:
 
-#
 
-#
 
-# CPU = 95%
 
-# RAM = 20%
 
-#
+CPU = 95%
 
-#
+RAM = 20%
 
-# What type of problem would you suspect?
 
-#
 
-# Explain your reasoning.
+
+
+What type of problem would you suspect?
+
+
+
+Explain your reasoning.
 
 I would suspect a CPU-bound.
 Because 95% CPU usage is very high.
@@ -907,25 +924,25 @@ Because 95% CPU usage is very high.
 
 # ============================================================
 
-# If you see:
+If you see:
 
-#
 
-#
 
-# CPU = 10%
 
-# RAM = 98%
 
-#
+CPU = 10%
 
-#
+RAM = 98%
 
-# What type of problem would you suspect?
 
-#
 
-# Explain your reasoning.
+
+
+What type of problem would you suspect?
+
+
+
+Explain your reasoning.
 
 I would suspect a memory problem.
 Because 98% RAM usage is too high.
@@ -936,23 +953,23 @@ Because 98% RAM usage is too high.
 
 # ============================================================
 
-# What is the purpose of SWAP?
+What is the purpose of SWAP?
 
-#
 
-# Think about the relationship between:
 
-#
+Think about the relationship between:
 
-# RAM
 
-# ↓
 
-# Swap
+RAM
 
-# ↓
+↓
 
-# Disk
+Swap
+
+↓
+
+Disk
 
 SWAP is used by OS to move some data to de Disk when there
 is not enough place on RAM
@@ -963,25 +980,25 @@ is not enough place on RAM
 
 # ============================================================
 
-# Why should you NOT necessarily assume that:
+Why should you NOT necessarily assume that:
 
-#
 
-#
 
-# free = 0
 
-#
 
-#
+free = 0
 
-# means that Linux has no memory available?
 
-#
 
-# Think about how Linux uses RAM for caching and the difference
 
-# between `free` and `available`.
+
+means that Linux has no memory available?
+
+
+
+Think about how Linux uses RAM for caching and the difference
+
+between `free` and `available`.
 
 Because sometime Linux use RAM for caching so it is better
 to look at available than only free.
@@ -992,17 +1009,17 @@ to look at available than only free.
 
 # ============================================================
 
-# What is the purpose of:
+What is the purpose of:
 
-#
 
-# top
 
-#
+top
 
-#
 
-# What kind of information can you observe with this command?
+
+
+
+What kind of information can you observe with this command?
 
 The top command gives us a dynamic overview of all
 processes running on the OS
@@ -1013,19 +1030,19 @@ processes running on the OS
 
 # ============================================================
 
-# What does OOM mean?
+What does OOM mean?
 
-#
 
-# OOM = ?
 
-#
+OOM = ?
 
-#
 
-# What can happen when a Linux system runs critically low
 
-# on memory?
+
+
+What can happen when a Linux system runs critically low
+
+on memory?
 
 OOM mean Out Of Memory.
 when Linux system runs critically low on memory,
@@ -1038,25 +1055,25 @@ the OOM killer can be triggered.
 
 # ============================================================
 
-# In:
+In:
 
-#
 
-#
 
-# PID   PPID   STATE
 
-# 415   300    S
 
-#
+PID   PPID   STATE
 
-#
+415   300    S
 
-# What do PID, PPID, and S represent?
 
-#
 
-#
+
+
+What do PID, PPID, and S represent?
+
+
+
+
 
 PID   →  unique Process ID
 
@@ -1064,11 +1081,11 @@ PPID  → unique Parent Process ID
 
 S     → Process is in Sleeping State
 
-#
 
-#
 
-# Try to explain what this tells you about the process.
+
+
+Try to explain what this tells you about the process.
 
 This help me to find and manage one specific process,
 its parent process and its state
