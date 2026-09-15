@@ -172,102 +172,103 @@ fg %1
 `%1` is job number
 
 
-# 5.9 — `Ctrl + Z`, `bg`, and `fg`
-# Let's continue with **job control**.
-#
-# Suppose you start:
-#
-# sleep 60
-#
-# The command runs in the **foreground**.
-#
-# ### `Ctrl + Z`
-#
-# Pressing:
-#
-# Ctrl + Z
-#
-# does **not** kill the process.
-#
-# It **pauses/stops** the foreground process.
-#
-# You may see:
-#
-# [1]+  Stopped    sleep 60
-#
-# The job still exists.
-#
+5.9 — `Ctrl + Z`, `bg`, and `fg`
+
+Let's continue with **job control**.
+
+Suppose you start:
+
+sleep 60
+
+The command runs in the **foreground**.
+
+### `Ctrl + Z`
+
+Pressing:
+
+Ctrl + Z
+
+does **not** kill the process.
+
+It **pauses/stops** the foreground process.
+
+You may see:
+
+[1]+  Stopped    sleep 60
+
+The job still exists.
+
+---
+
+### `bg`
+
+Now you can resume the stopped job **in the background**:
+
+bg %1
+
+The process continues running, but your terminal is available again.
+
+You can check:
+
+jobs
+
+and see:
+
+[1]+  Running    sleep 60 &
+
+---
+
+### `fg`
+
+You can bring it back to the foreground:
+
+fg %1
+
+So the complete flow is:
+
+sleep 60
+    ↓
+Ctrl + Z
+    ↓
+Stopped
+    ↓
+bg %1
+    ↓
+Running in background
+    ↓
+fg %1
+    ↓
+Foreground
+
+### ⚠️ Important distinction
+
+Ctrl + C
+
+➡️ **terminates/interupts** the foreground process.
+
+Ctrl + Z
+
+➡️ **stops/pauses** the foreground process.
+
+They are **not the same**.
+
 # ---
-#
-# ### `bg`
-#
-# Now you can resume the stopped job **in the background**:
-#
-# bg %1
-#
-# The process continues running, but your terminal is available again.
-#
-# You can check:
-#
-# jobs
-#
-# and see:
-#
-# [1]+  Running    sleep 60 &
-#
-# ---
-#
-# ### `fg`
-#
-# You can bring it back to the foreground:
-#
-# fg %1
-#
-# So the complete flow is:
-#
-# sleep 60
-#     ↓
-# Ctrl + Z
-#     ↓
-# Stopped
-#     ↓
-# bg %1
-#     ↓
-# Running in background
-#     ↓
-# fg %1
-#     ↓
-# Foreground
-#
-# ### ⚠️ Important distinction
-#
-# Ctrl + C
-#
-# ➡️ **terminates/interupts** the foreground process.
-#
-# Ctrl + Z
-#
-# ➡️ **stops/pauses** the foreground process.
-#
-# They are **not the same**.
-#
-# ---
-#
-# # 🧪 Exercise 8
-#
-# Imagine you run:
-#
-# sleep 120
-#
-# Then you press:
-#
-# Ctrl + Z
-#
-# Linux responds:
-#
-# [1]+  Stopped    sleep 120
-#
-# Answer:
+
+# 🧪 Exercise 8
+
+Imagine you run:
+
+sleep 120
+
+Then you press:
+
+Ctrl + Z
+
+Linux responds:
+
+[1]+  Stopped    sleep 120
+
+Answer:
 #
 **1.** Did the process get terminated?
 
@@ -287,88 +288,90 @@ The fist terminate (kill) the foreground process while the second
 just pauses it
 
 
-# 5.10 — `systemctl`: Managing Services
-# Now we move from individual processes to **services**.
-#
-# A **service** is a program designed to run in the background and provide functionality to the system or other applications.
-#
-# Common examples:
-#
-# nginx       → web server
-# ssh         → remote access
-# docker      → container runtime
-# postgresql  → database
-#
-# On modern Debian systems, services are commonly managed by **systemd**.
-#
-# The main command is:
-#
-# systemctl
-#
-# For example:
-#
-# systemctl status ssh
-#
-# This asks:
-#
-# > What is the current status of the SSH service?
-#
-# You might see:
-#
-# ● ssh.service - OpenBSD Secure Shell server
-#      Loaded: loaded
-#      Active: active (running)
-#
-# The important part is:
-#
-# Active: active (running)
-#
-# which means the service is currently running.
-#
-# You can also use:
-#
-# systemctl is-active ssh
-#
-# which gives a simpler result:
-#
-# active
-#
-# ---
-#
-# ## Cloud/DevOps perspective ☁️
-#
-# Imagine your application is unreachable.
-#
-# You could investigate:
-#
-# Application
-#     ↓
-# Is the process running?
-#     ↓
-# Is the service running?
-#     ↓
-# Is the server healthy?
-#     ↓
-# Is the network working?
-#
-# `systemctl` becomes particularly useful when your application depends on services such as **Nginx, SSH, Docker, or a database**.
-#
-# ---
-#
-# # 🧪 Exercise 9
-#
-# Suppose you run:
-#
-# systemctl status nginx
-#
-# and get:
-#
-# ● nginx.service
-#      Loaded: loaded
-#      Active: active (running)
-#
-# Answer:
-#
+5.10 — `systemctl`: Managing Services
+
+Now we move from individual processes to **services**.
+
+A **service** is a program designed to run in the background and provide functionality to the system or other applications.
+
+Common examples:
+
+nginx       → web server
+ssh         → remote access
+docker      → container runtime
+postgresql  → database
+
+On modern Debian systems, services are commonly managed by **systemd**.
+
+The main command is:
+
+systemctl
+
+For example:
+
+systemctl status ssh
+
+This asks:
+
+> What is the current status of the SSH service?
+
+You might see:
+
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded
+     Active: active (running)
+
+The important part is:
+
+Active: active (running)
+
+which means the service is currently running.
+
+You can also use:
+
+systemctl is-active ssh
+
+which gives a simpler result:
+
+active
+
+---
+
+## Cloud/DevOps perspective ☁️
+
+Imagine your application is unreachable.
+
+You could investigate:
+
+Application
+    ↓
+Is the process running?
+    ↓
+Is the service running?
+    ↓
+Is the server healthy?
+    ↓
+Is the network working?
+
+`systemctl` becomes particularly useful when your application depends on services such as **Nginx, SSH, Docker, or a database**.
+
+
+---
+
+# 🧪 Exercise 9
+
+Suppose you run:
+
+systemctl status nginx
+
+and get:
+
+● nginx.service
+     Loaded: loaded
+     Active: active (running)
+
+Answer:
+
 
 **1.** Is the nginx service running?
 

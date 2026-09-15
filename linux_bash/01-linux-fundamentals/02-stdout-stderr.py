@@ -2,43 +2,43 @@
 # Exercise 5 — stderr: 2> and 2>&1
 # ============================================================
 
-# Now let's learn something very important for Cloud/DevOps
-# troubleshooting.
+Now let's learn something very important for Cloud/DevOps
+troubleshooting.
 
-# Linux has different output streams:
+Linux has different output streams:
 
-# 1 = stdout → normal output
-# 2 = stderr → error output
+1 = stdout → normal output
+2 = stderr → error output
 
 
-# For example:
+For example:
 
-# some-command > output.log
+some-command > output.log
 
-# saves normal output, but an error may still appear
-# on the terminal.
+saves normal output, but an error may still appear
+on the terminal.
 
-# To redirect errors:
+To redirect errors:
 
-# some-command 2> errors.log
+some-command 2> errors.log
 
 
 # ============================================================
 # Your Exercise
 # ============================================================
 
-# Consider:
+Consider:
 
-# ls /home/steve
+ls /home/steve
 
-# This command succeeds and produces normal output.
+This command succeeds and produces normal output.
 
 
-# Now consider:
+Now consider:
 
-# ls /does-not-exist
+ls /does-not-exist
 
-# This produces an error.
+This produces an error.
 
 
 # ============================================================
@@ -84,55 +84,55 @@ output.log.
 # chmod: Changing Permissions
 # ============================================================
 
-# Now we need to learn how to modify these permissions.
+Now we need to learn how to modify these permissions.
 
-# The command is:
+The command is:
 
-# chmod
-
-
-# For example:
-
-# chmod +x script.sh
-
-# means:
-
-# Add execute permission.
+chmod
 
 
-# And:
+For example:
 
-# chmod -x script.sh
+chmod +x script.sh
 
-# means:
+means:
 
-# Remove execute permission.
-
-
-# We can also specify who gets the permission:
-
-# u = user/owner
-# g = group
-# o = others
-# a = all
+Add execute permission.
 
 
-# Examples:
+And:
+
+chmod -x script.sh
+
+means:
+
+Remove execute permission.
 
 
-# chmod u+x script.sh
+We can also specify who gets the permission:
 
-# → give the owner execute permission.
-
-
-# chmod g+w app.log
-
-# → give the group write permission.
+u = user/owner
+g = group
+o = others
+a = all
 
 
-# chmod o-r secret.txt
+Examples:
 
-# → remove read permission from others.
+
+chmod u+x script.sh
+
+→ give the owner execute permission.
+
+
+chmod g+w app.log
+
+→ give the group write permission.
+
+
+chmod o-r secret.txt
+
+→ remove read permission from others.
 
 # ============================================================
 # Exercise 2

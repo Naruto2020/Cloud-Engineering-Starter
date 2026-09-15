@@ -34,22 +34,22 @@ Other: ---
 # chmod 600 secret.txt
 
 
-# Before we use it, answer this:
+Before we use it, answer this:
 
-# Linux assigns numbers to permissions:
+Linux assigns numbers to permissions:
 
-# r = 4
-# w = 2
-# x = 1
-# - = 0
+r = 4
+w = 2
+x = 1
+- = 0
 
 
-# Therefore:
+Therefore:
 
-# rwx = 4 + 2 + 1 = 7
-# rw- = 4 + 2 + 0 = 6
-# r-x = 4 + 0 + 1 = 5
-# r-- = 4 + 0 + 0 = 4
+rwx = 4 + 2 + 1 = 7
+rw- = 4 + 2 + 0 = 6
+r-x = 4 + 0 + 1 = 5
+r-- = 4 + 0 + 0 = 4
 
 
 # ============================================================
@@ -88,54 +88,54 @@ Other: ---
 # Important Shortcut
 # ============================================================
 
-# Memorize these:
+Memorize these:
 
-# 755 → rwxr-xr-x
-# 644 → rw-r--r--
-# 600 → rw-------
+755 → rwxr-xr-x
+644 → rw-r--r--
+600 → rw-------
 
 
-# You'll encounter them frequently when working with Linux,
-# SSH keys, scripts, configuration files, and cloud servers.
+You'll encounter them frequently when working with Linux,
+SSH keys, scripts, configuration files, and cloud servers.
 
 
 # ============================================================
 # One Important Distinction
 # ============================================================
 
-# For a file:
+For a file:
 
-# x = execute the file
-
-
-# For a directory:
-
-# x = enter/access the directory
+x = execute the file
 
 
-# We'll come back to that because it's important.
+For a directory:
+
+x = enter/access the directory
+
+
+We'll come back to that because it's important.
 
 
 # ============================================================
 # Exercise 4 — Real Cloud/DevOps Scenario
 # ============================================================
 
-# You have these files:
+You have these files:
 
-# app.sh
-# config.env
-# private.key
+app.sh
+config.env
+private.key
 
 
-# You want:
+You want:
 
-# app.sh → owner can read/write/execute;
-#          everyone else can read/execute.
+app.sh → owner can read/write/execute;
+         everyone else can read/execute.
 
-# config.env → owner can read/write;
-#              group and others can only read.
+config.env → owner can read/write;
+             group and others can only read.
 
-# private.key → only the owner can read/write.
+private.key → only the owner can read/write.
 
 
 # ============================================================
@@ -170,19 +170,19 @@ Because : Owner : rw- / Group : --- / Other : ---
 
 # ============================================================
 
-# These three are particularly useful to remember:
+These three are particularly useful to remember:
 
-# chmod 755 app.sh
+chmod 755 app.sh
 
-# chmod 644 config.env
+chmod 644 config.env
 
-# chmod 600 private.key
+chmod 600 private.key
 
-# Especially:
+Especially:
 
-# chmod 600 private.key
+chmod 600 private.key
 
-# because private keys should not be accessible by other users.
+because private keys should not be accessible by other users.
 
 
 # ============================================================
@@ -191,39 +191,39 @@ Because : Owner : rw- / Group : --- / Other : ---
 
 # ============================================================
 
-# So far we've learned how to change permissions with:
+So far we've learned how to change permissions with:
 
-# chmod
+chmod
 
-# Now we need to learn how to change ownership.
+Now we need to learn how to change ownership.
 
-# The command is:
+The command is:
 
-# chown
+chown
 
-# For example:
+For example:
 
-# chown steve config.txt
+chown steve config.txt
 
-# means:
+means:
 
-#
 
-# Make steve the owner of config.txt.
 
-# You can also change owner + group:
+Make steve the owner of config.txt.
 
-# chown steve:developers config.txt
+You can also change owner + group:
 
-# Meaning:
+chown steve:developers config.txt
 
-# owner → steve
+Meaning:
 
-# group → developers
+owner → steve
 
-# You can verify it with:
+group → developers
 
-# ls -l config.txt
+You can verify it with:
+
+ls -l config.txt
 
 # ============================================================
 
@@ -231,39 +231,39 @@ Because : Owner : rw- / Group : --- / Other : ---
 
 # ============================================================
 
-# Suppose we have:
+Suppose we have:
 
-# -rw-r--r-- 1 root developers 250 Sep 9 config.txt
+-rw-r--r-- 1 root developers 250 Sep 9 config.txt
 
-# You want:
+You want:
 
-#
 
-# steve should become the owner, while the group developers
 
-# stays unchanged.
+steve should become the owner, while the group developers
 
-# Question
+stays unchanged.
 
-#
+Question
 
-# Which command is correct?
 
-# A
 
-# chown steve:developers config.txt
+Which command is correct?
 
-# B
+A
 
-# chown steve config.txt
+chown steve:developers config.txt
 
-# C
+B
 
-# chmod steve config.txt
+chown steve config.txt
 
-# And explain what happens to the owner and group after
+C
 
-# the command.
+chmod steve config.txt
+
+And explain what happens to the owner and group after
+
+the command.
 
 B `chown steve config.txt`
 
@@ -278,33 +278,33 @@ and we want `steve` to become the owner while keeping the
 
 # ============================================================
 
-# There is also a command specifically for changing the group:
+There is also a command specifically for changing the group:
 
-# chgrp
+chgrp
 
-# Suppose:
+Suppose:
 
-# -rw-r--r-- 1 steve developers config.txt
+-rw-r--r-- 1 steve developers config.txt
 
-# You want to change the group from developers to devops,
+You want to change the group from developers to devops,
 
-# while keeping steve as the owner.
+while keeping steve as the owner.
 
-# What command would you use?
+What command would you use?
 
-# A
+A
 
-# chgrp devops config.txt
+chgrp devops config.txt
 
-# B
+B
 
-# chown devops config.txt
+chown devops config.txt
 
-# C
+C
 
-# chmod devops config.txt
+chmod devops config.txt
 
-# And tell me what the resulting owner and group will be.
+And tell me what the resulting owner and group will be.
 
 A chgrp devops config.txt
 Result : -rw-r--r-- 1 steve devops config.txt
@@ -316,22 +316,22 @@ Result : -rw-r--r-- 1 steve devops config.txt
 
 # ============================================================
 
-# chmod          # change permissions
+chmod          # change permissions
 
-# chown          # change owner
+chown          # change owner
 
-# chgrp          # change group
+chgrp          # change group
 
-# And:
+And:
 
-# chown steve config.txt
+chown steve config.txt
 
-# → owner
+→ owner
 
-# chown steve:devops config.txt
+chown steve:devops config.txt
 
-# → owner + group
+→ owner + group
 
-# chgrp devops config.txt
+chgrp devops config.txt
 
-# → group only
+→ group only

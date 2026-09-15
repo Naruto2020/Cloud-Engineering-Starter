@@ -73,7 +73,10 @@ show the last 20 entries
 You can also do:
 
 journalctl -n 50
+
+
 4. Logs for a specific service
+
 
 This is extremely important.
 
@@ -96,6 +99,7 @@ journalctl -u nginx -n 20
 Meaning:
 
 Show me the last 20 nginx log entries.
+
 
 5. Follow logs in real time
 
@@ -126,6 +130,7 @@ Press:
 Ctrl + C
 
 to stop following.
+
 
 6. Logs since a specific time
 
@@ -247,9 +252,9 @@ Remember these four
 
 Command	                Meaning
 
-journalctl -n 20	Last 20 journal entries
+journalctl -n 20	    Last 20 journal entries
 
-journalctl -u nginx	Logs for nginx service
+journalctl -u nginx	    Logs for nginx service
 
 journalctl -f	        Follow logs in real time
 
@@ -279,4 +284,3 @@ Failed to start
 
 That will turn journalctl from a simple log viewer into a
 troubleshooting tool.
-

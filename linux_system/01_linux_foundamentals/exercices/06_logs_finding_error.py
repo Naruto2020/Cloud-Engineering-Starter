@@ -70,7 +70,6 @@ This can quickly reveal the important part of a large log.
 3. Common errors you should recognize
 
 Permission denied
-Permission denied
 
 Usually means:
 
@@ -190,6 +189,8 @@ what command could you use to check whether something is listening on
 that port?
 
 ss -tulpn | grep :5432
+
+
 
 B- Suppose you run:
 
