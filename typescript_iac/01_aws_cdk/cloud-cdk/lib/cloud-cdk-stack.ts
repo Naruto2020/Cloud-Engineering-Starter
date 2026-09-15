@@ -3,7 +3,7 @@ import { Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import {Tags} from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -24,7 +24,7 @@ export class CloudCdkStack extends cdk.Stack {
 
     const tags = {
        Environment: "development",
-       Project: "cloud-engineering-satrter",
+       Project: "cloud-engineering-starter",
        Owner: "steve"
     };
 
@@ -61,13 +61,13 @@ export class CloudCdkStack extends cdk.Stack {
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(443),
       'Allow HTTPS traffic'
-    )
+    );
 
     loadBalancerSG.addIngressRule(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(80),
       'Allow HTTP traffic'
-    )
+    );
     
     const applicationSG = new ec2.SecurityGroup(this, 'ApplicationSG', {
       vpc: vpc,
@@ -79,8 +79,20 @@ export class CloudCdkStack extends cdk.Stack {
       loadBalancerSG,
       ec2.Port.tcp(8080),
       'Allow HTTP traffic from LB'
-    )
+    );
 
+    // Create a role that needs access to the S3 bucket
+       const userRole = new iam.Role(this, "UserRole", {
+       assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+
+    });
+
+    const s3Policy = new iam.PolicyStatement({
+      actions: ["s3:GetObject"],
+      resources: ["arn:aws:s3:::my-company-data/*"] 
+    });
+    
+    userRole.addToPolicy(s3Policy);
   }
 }
 

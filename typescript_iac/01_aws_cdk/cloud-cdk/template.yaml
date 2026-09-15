@@ -500,10 +500,43 @@ Resources:
       ToPort: 8080
     Metadata:
       aws:cdk:path: CloudCdkStack/ApplicationSG/from CloudCdkStackLoadBalancerSG7174660B:8080
+  UserRoleB7C3739B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-satrter
+    Metadata:
+      aws:cdk:path: CloudCdkStack/UserRole/Resource
+  UserRoleDefaultPolicyBC5E062B:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: arn:aws:s3:::my-company-data/*
+        Version: "2012-10-17"
+      PolicyName: UserRoleDefaultPolicyBC5E062B
+      Roles:
+        - Ref: UserRoleB7C3739B
+    Metadata:
+      aws:cdk:path: CloudCdkStack/UserRole/DefaultPolicy/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/81V32/aMBD+W+pHZDJEJzTxFrIKRWoLgqoPQ6hynIO6mHPmH2FZlP99SuKEduvDpm0ST7bPd5+/O38+j4Px5FMwumInM+TpYShFEpRry/iBspN5Ks11UM4cP4DdlCQHbYRCSMnUageUAHJdZFYoJFOyvn66C+/D+c1nQkkiFT8sXSIFDzkHY8iUDAglUuyAF1zCykkwZLopq21FS8LS9Pb1VrNDm5AB2VZbGu2w5VFR4OOgfMz4piQiC9NUgzHQHXBk38Lv3QKZnTMLJ1Z0FuMSBBsp3Im906ylvikJF6m+Y+bQBx7hTcRDkdWGNiNSM/7dCC1yZoFUPonHZURblHXjtikJy5mQLBFS2OKLwg4mz3ic+nl92KwuaZ9l1oLE2QJvmUP+3N2JyPJJ9JM7M0bsMc7yiS/XAiMNPnsyaPK5CBZeCvf9vZHpphHApRC8DBatlFoB1bOVchYeWCLhbD/bQmMUFw1A71xPbuJlPZyLTb1Y/7kyd0yaC6j539G4HCYXQqNVYYwWNEKvobbH+VVoLePPR0BL18CdFraYa+Wy+jPJuD8qBcO1yHpoSpiU6hRKuXA2UQ5Tz9R3hxj3NaHumyCcYYxSoP842pfFFSLwGrNr/Q7FVwe+QM199p3lP2D+WXo1/rtMav8OtX30r8v4i8EHVxVdgVFOc6CRM1Ydu2XTTZsu8P7+UqtcpKBnzAANjQG7tmwvcF9RVCkEL+ZDPv4YjEfB6OrFCDHUDq04QrBqxx+Mzb8gUAgAAA==
+      Analytics: v2:deflate64:H4sIAAAAAAAA/81WW2vbMBT+LdVjUb2QjjLy5mSlGHoJSejDQiiKdJKqkSVPF2ee8X8fsmSnXTrY2AZ5snSOzqfvXHSOh8nw6lMyOCN7c0HZ7kLwdVLPLaE7TPbmqTaXST12dAd2WaMStOFKAkMjqx1gBJLqqrBcSTRC88unu/Q+vbn+jDBaC0V3U7cWnKaUgjFohM4RRoJvgFZUwMwJMGi0rJtVg2tEGLt9rWo1uDU5R6tmhScbGXg0GOgwqR8LuqwRL1LGNBgD3QU5+ZZ+7zaS2BtiYU+qTmLcWoKdKLnhW6dJoL6sEeVM3xGz6w1zeGOxqAovCB4hz/h3LTQviQXURCcepxMcUObtsWWNSEm4IGsuuK2+KNnBlAXNWFz7y8Y+pL2XRQDJigd5S5ykz11OeFFeTX46TozhW5kV5VUM14OcaIjeo/PWn5NgEUvhvs8bGi3bAjgVgqfBIpRSKCC/milnYUHWAg7ygyw1RlHeAvSH/eI6m/rPIdg4Fus/r8wNEeYEYv53NE6HyYnQCFWYSQtaQl9DocfFXWotoc85SIvnQJ3mtrrRyhV+mBQ0XsXAUM2LHhojIoTap0I8OLtWTrLINHaHTG49oW5MIEpkJgWXcXCEl0WVlEA9Ztf6neRfHcQAtfnsO8t/wPwz9zz+u0z8+Q41PPrXYTwSROMGc5In9UwJ8K/YGJcDG1doVKNCc0l5QURKqXLSHtLtcvAGKT3kOFJaqKkSnFZvxvVCTTuoI22b9RC/XtcH+5fKVehOAnCQB+ejwUJ5zRHOsZixuSUWfM11/xctcMBsGjwDo5ymgCfOWJV32xahZfC+fqpVyRnoMTGAU2PAzi3ZcrltsFQMkhfzoRx+TIaDZHD2Yji/0E5ankMyC98fzjV8FWoJAAA=
     Metadata:
       aws:cdk:path: CloudCdkStack/CDKMetadata/Default
     Condition: CDKMetadataAvailable
