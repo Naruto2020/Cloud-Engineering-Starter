@@ -248,6 +248,7 @@ default gateway
        |
        v
      8.8.8.8
+     
 And this is the important distinction
 
 ip route tells you what routes exist.

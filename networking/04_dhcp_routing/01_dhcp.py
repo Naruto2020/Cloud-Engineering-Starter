@@ -75,6 +75,7 @@ Default gateway
 Tells the machine where to send traffic destined for other networks.
 
 192.168.1.1
+
 DNS server
 
 Tells the machine where to send DNS queries.
