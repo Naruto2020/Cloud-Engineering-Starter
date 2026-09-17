@@ -64,6 +64,11 @@ address MAC : ip neigh
    B- If ARP NOK 
       ==> check eth0
 
+============================================
+
+	Ton troubleshooting final
+
+
 Application cannot reach 10.20.30.50
                 │
                 ↓
@@ -73,7 +78,7 @@ Application cannot reach 10.20.30.50
         Route / next hop ?
                 │
                 ↓
-2. ip neigh
+2. 	    ip neigh
                 │
                 ↓
        IP → MAC du next hop ?

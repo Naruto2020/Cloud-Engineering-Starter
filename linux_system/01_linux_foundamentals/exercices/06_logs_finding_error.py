@@ -129,8 +129,6 @@ firewall/network issue
 
 No such file or directory
 
-No such file or directory
-
 Usually means the application expected a file, directory, executable, 
 or path that doesn't exist.
 
