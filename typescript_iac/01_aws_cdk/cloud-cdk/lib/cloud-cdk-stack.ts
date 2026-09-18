@@ -82,8 +82,8 @@ export class CloudCdkStack extends cdk.Stack {
     );
 
     // Create a role that needs access to the S3 bucket
-       const userRole = new iam.Role(this, "UserRole", {
-       assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+      const userRole = new iam.Role(this, "UserRole", {
+      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
 
     });
 
@@ -93,6 +93,17 @@ export class CloudCdkStack extends cdk.Stack {
     });
     
     userRole.addToPolicy(s3Policy);
+
+    const instance = new ec2.Instance(this, 'Instance', {
+       vpc,
+       instanceType: ec2.InstanceType.of(
+           ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO
+       ),
+       machineImage: ec2.MachineImage.latestAmazonLinux2023(),
+       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
+       role: userRole,
+    });
+
   }
 }
 

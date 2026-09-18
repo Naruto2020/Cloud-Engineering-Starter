@@ -21,7 +21,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VersioningConfiguration:
         Status: Enabled
     UpdateReplacePolicy: Retain
@@ -43,7 +43,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
     Metadata:
       aws:cdk:path: CloudCdkStack/TheVPC/Resource
   TheVPCingressSubnet1Subnet9B9DF7E0:
@@ -67,7 +67,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -83,7 +83,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -121,7 +121,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
     Metadata:
       aws:cdk:path: CloudCdkStack/TheVPC/ingressSubnet1/EIP
   TheVPCingressSubnet1NATGateway439153F2:
@@ -141,7 +141,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
     DependsOn:
       - TheVPCingressSubnet1DefaultRouteB77FAA4E
       - TheVPCingressSubnet1RouteTableAssociationEAB00BCF
@@ -168,7 +168,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -184,7 +184,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -231,7 +231,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -247,7 +247,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -292,7 +292,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -308,7 +308,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -343,7 +343,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
     Metadata:
       aws:cdk:path: CloudCdkStack/TheVPC/IGW
   TheVPCVPCGWC9B93E30:
@@ -459,7 +459,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -478,7 +478,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
       VpcId:
         Ref: TheVPC92636AB0
     Metadata:
@@ -516,7 +516,7 @@ Resources:
         - Key: Owner
           Value: steve
         - Key: Project
-          Value: cloud-engineering-satrter
+          Value: cloud-engineering-starter
     Metadata:
       aws:cdk:path: CloudCdkStack/UserRole/Resource
   UserRoleDefaultPolicyBC5E062B:
@@ -533,13 +533,83 @@ Resources:
         - Ref: UserRoleB7C3739B
     Metadata:
       aws:cdk:path: CloudCdkStack/UserRole/DefaultPolicy/Resource
+  InstanceInstanceSecurityGroupF0E2D5BE:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: CloudCdkStack/Instance/InstanceSecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/Instance
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-starter
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/Instance/InstanceSecurityGroup/Resource
+  InstanceInstanceProfileAB5AEF02:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: UserRoleB7C3739B
+    Metadata:
+      aws:cdk:path: CloudCdkStack/Instance/InstanceProfile
+  InstanceC1063A87:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      IamInstanceProfile:
+        Ref: InstanceInstanceProfileAB5AEF02
+      ImageId:
+        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: t3.micro
+      SecurityGroupIds:
+        - Fn::GetAtt:
+            - InstanceInstanceSecurityGroupF0E2D5BE
+            - GroupId
+      SubnetId:
+        Ref: TheVPCapplicationSubnet1Subnet2149DB21
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Name
+          Value: CloudCdkStack/Instance
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-starter
+      UserData:
+        Fn::Base64: "#!/bin/bash"
+    DependsOn:
+      - UserRoleDefaultPolicyBC5E062B
+      - UserRoleB7C3739B
+    Metadata:
+      aws:cdk:path: CloudCdkStack/Instance/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/81WW2vbMBT+LdVjUb2QjjLy5mSlGHoJSejDQiiKdJKqkSVPF2ee8X8fsmSnXTrY2AZ5snSOzqfvXHSOh8nw6lMyOCN7c0HZ7kLwdVLPLaE7TPbmqTaXST12dAd2WaMStOFKAkMjqx1gBJLqqrBcSTRC88unu/Q+vbn+jDBaC0V3U7cWnKaUgjFohM4RRoJvgFZUwMwJMGi0rJtVg2tEGLt9rWo1uDU5R6tmhScbGXg0GOgwqR8LuqwRL1LGNBgD3QU5+ZZ+7zaS2BtiYU+qTmLcWoKdKLnhW6dJoL6sEeVM3xGz6w1zeGOxqAovCB4hz/h3LTQviQXURCcepxMcUObtsWWNSEm4IGsuuK2+KNnBlAXNWFz7y8Y+pL2XRQDJigd5S5ykz11OeFFeTX46TozhW5kV5VUM14OcaIjeo/PWn5NgEUvhvs8bGi3bAjgVgqfBIpRSKCC/milnYUHWAg7ygyw1RlHeAvSH/eI6m/rPIdg4Fus/r8wNEeYEYv53NE6HyYnQCFWYSQtaQl9DocfFXWotoc85SIvnQJ3mtrrRyhV+mBQ0XsXAUM2LHhojIoTap0I8OLtWTrLINHaHTG49oW5MIEpkJgWXcXCEl0WVlEA9Ztf6neRfHcQAtfnsO8t/wPwz9zz+u0z8+Q41PPrXYTwSROMGc5In9UwJ8K/YGJcDG1doVKNCc0l5QURKqXLSHtLtcvAGKT3kOFJaqKkSnFZvxvVCTTuoI22b9RC/XtcH+5fKVehOAnCQB+ejwUJ5zRHOsZixuSUWfM11/xctcMBsGjwDo5ymgCfOWJV32xahZfC+fqpVyRnoMTGAU2PAzi3ZcrltsFQMkhfzoRx+TIaDZHD2Yji/0E5ankMyC98fzjV8FWoJAAA=
+      Analytics: v2:deflate64:H4sIAAAAAAAA/81WbWvbMBD+LdPHonolHWXkm5OVYuhLSEI/LISiSJdUjSx5enHmGf/3IUt20jWFjW2QT5bvpOeeu3t88iAZXH1OLj6QnTmnbHsu+CqpZ5bQLSY781Sby6QeOboFu6hRCdpwJYGhodUOMAJJdVVYriQaotnl0116n95cf0EYrYSi24lbCU5TSsEYNERnCCPB10ArKmDqBBg0XNTNssE1IozdHrpaD26PnKFls8TjtQw8Ggx0kNSPBV3UiBcpYxqMgS5ATr6nP7oXSewNsbAjVWcxbiXBjpVc843TJFBf1Ihypu+I2fYHc3h1Yl4V3hAyQp7x757QvCQWUBOTeJyMcUCZtdsWNSIl4YKsuOC2+qpkB1MWNGNx7YONfEn7LIsAkhUP8pY4SZ+7nvCivBr/sp0YwzcyK8qrWK4HOdYQs0dnbT4nwSJK4b7vGxouWgGcCsHTYBGkFATkV1PlLMzJSsDevrelxijKW4B+s19cZxP/2BcbR7H+c2WuiTAnUPO/o3E6TE6ERlBhJi1oCb2GwoyLb6m1hD7nIC2eAXWa2+pGK1f4y6SgMRQDQzUvemiMiBBqlwrx4OxKOcki0zgdMrnxhLprAlEiMym4jBdH+LKokhKox+xGv5P8m4NYoLaf/WT5D5h/lp7HP8rE7z+Kehxjb/ed2/s8uzAzDrvwxhBj40waSySFV23i0RgvtiAq+swlZDnZHGgwjA+DhvU7VyFGWgk4YNXFazAneVJPlfChiTEuBzaqPFKhuaS8ICKlVDlp9zJ1OfgDKd1rM5ZyriZKcFq9+s2Yq0kH9cbbqjX0vff1InnXuQxTVQAO9tC0eGCupqrr5AHOWzNjM0ss+G+l+y9qgQPmYZUmWq25gKbBUzDKaQp47IxVeffagrakjvsnWpWcgR4RAzg1BuzMkg2XmzYe0SQHC7rBUjFIXszHcvApGVwkFx9eDOfn2knLc0im4fkTflUzfEIKAAA=
     Metadata:
       aws:cdk:path: CloudCdkStack/CDKMetadata/Default
     Condition: CDKMetadataAvailable
+Parameters:
+  SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
 Conditions:
   CDKMetadataAvailable:
     Fn::Or:
@@ -639,9 +709,4 @@ Conditions:
       - Fn::Equals:
           - Ref: AWS::Region
           - us-west-2
-Parameters:
-  BootstrapVersion:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: /cdk-bootstrap/hnb659fds/version
-    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
 
