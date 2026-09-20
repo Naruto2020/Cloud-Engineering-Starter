@@ -22,6 +22,7 @@ LLM
 
 The attacker directly sends the malicious instruction to the AI.
 
+
 Indirect prompt injection:
 
 User
@@ -208,7 +209,7 @@ The user only asked:
 
 What type of attack is this, and why?
 
--> This is an indirect prompt injection because the attacker puts 
+-> This is an indirect prompt injection because the attacker hides 
 malicious instructions inside an email that the AI processes. 
 The malicious content can then become part of the AI's context and 
 influence its behavior.
@@ -251,3 +252,42 @@ Question 5
 Complete this sentence:
 
 Data should not automatically be treated as _ ` instructions`__.
+
+
+
+🧠 Your mental model so far
+
+You've now got these two attack types:
+
+DIRECT PROMPT INJECTION
+
+Attacker
+   ↓
+Malicious prompt
+   ↓
+LLM
+
+and:
+
+INDIRECT PROMPT INJECTION
+
+Attacker
+   ↓
+Malicious data
+   ↓
+RAG / Email / Web page / Document
+   ↓
+LLM
+
+And you've connected that to Cloud Security:
+
+Indirect Injection
+       ↓
+   LLM manipulation
+       ↓
+    AI Agent
+       ↓
+   IAM Role
+       ↓
+  Cloud Resources
+
