@@ -115,3 +115,21 @@ the most disk space?
 
 ==> 1- du -sh *
     2- du -sh /var/*
+
+
+==================================================================
+
+5.16 — Disks, Partitions & lsblk
+
+==================================================================
+
+
+When troubleshooting a Linux server, df tells you about filesystems, but sometimes you need to understand the underlying disks and partitions.
+
+That's where lsblk comes in.
+
+1. lsblk
+
+Run:
+
+lsblk
