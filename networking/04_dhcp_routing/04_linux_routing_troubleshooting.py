@@ -66,7 +66,7 @@ address MAC : ip neigh
 
 ============================================
 
-	Ton troubleshooting final
+	You final troubleshooting
 
 
 Application cannot reach 10.20.30.50

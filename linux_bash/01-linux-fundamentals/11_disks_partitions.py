@@ -113,7 +113,6 @@ Your turn.
 5. No
 6. df -h /
 
-
 ================================================================
 
 5.17 — Practical Resource Troubleshooting
@@ -230,7 +229,7 @@ Your questions
 
 
 1. PID: 4521 -> %CPU 88.5  python app.py
-2.PID: 4521
+2. PID: 4521
 3. Yes
 4. Yes there is evidence of memory pressure -> available 700Mi 
    on 8Gi and swap: 1.7Gi / 2Gi
