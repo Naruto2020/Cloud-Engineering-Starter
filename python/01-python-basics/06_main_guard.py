@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
 Then run:
 
-python3 python/01-python-basics/python-modules/main.py
+python3 main.py
 
 You should not see:
 
@@ -48,12 +48,12 @@ Monitoring module executed directly
 
 Then run monitoring.py directly:
 
-python3 python/01-python-basics/python-modules/monitoring.py
+python3 monitoring.py
 
 This time you should see:
 
 Monitoring module executed directly
-
+1VZE
 "Don't worry if __name__ looks strange right now. The exercise is mainly"
 "to observe the difference. Then I'll explain exactly what Python is doing."
 

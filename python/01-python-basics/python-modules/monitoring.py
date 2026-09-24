@@ -45,4 +45,3 @@ def check_server(server: dict) -> str:
 if __name__ == "__main__":
     print("Monitoring module executed directly")
 
-
