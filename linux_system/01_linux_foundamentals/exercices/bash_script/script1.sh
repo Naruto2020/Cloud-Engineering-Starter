@@ -1,9 +1,9 @@
 #!/bin/bash
 
-
 server_name=$(hostname)
 environment="production"
 status=$(systemctl is-active nginx)
+echo $? "test"
 
 if [ "$status" = "active" ]; then
     echo "Server: $server_name"
@@ -16,4 +16,5 @@ elif [ "$status" = "inactive" ]; then
 else
     echo "ERROR: Nginx has failed"
 fi
+
 
