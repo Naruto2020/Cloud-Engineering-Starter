@@ -595,10 +595,82 @@ Resources:
       - UserRoleB7C3739B
     Metadata:
       aws:cdk:path: CloudCdkStack/Instance/Resource
+  LB8A12904C:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: "false"
+      Scheme: internet-facing
+      SecurityGroups:
+        - Fn::GetAtt:
+            - LoadBalancerSG4572B15E
+            - GroupId
+      Subnets:
+        - Ref: TheVPCingressSubnet1Subnet9B9DF7E0
+        - Ref: TheVPCingressSubnet2Subnet8155F998
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-starter
+      Type: application
+    DependsOn:
+      - TheVPCingressSubnet1DefaultRouteB77FAA4E
+      - TheVPCingressSubnet1RouteTableAssociationEAB00BCF
+      - TheVPCingressSubnet2DefaultRoute293EF68A
+      - TheVPCingressSubnet2RouteTableAssociation4E496446
+    Metadata:
+      aws:cdk:path: CloudCdkStack/LB/Resource
+  LBListener49E825B4:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: LBListenerEc2TargetGroupAD622A7A
+          Type: forward
+      LoadBalancerArn:
+        Ref: LB8A12904C
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-starter
+    Metadata:
+      aws:cdk:path: CloudCdkStack/LB/Listener/Resource
+  LBListenerEc2TargetGroupAD622A7A:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 8080
+      Protocol: HTTP
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-starter
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: "false"
+      TargetType: instance
+      Targets:
+        - Id:
+            Ref: InstanceC1063A87
+      VpcId:
+        Ref: TheVPC92636AB0
+    Metadata:
+      aws:cdk:path: CloudCdkStack/LB/Listener/Ec2TargetGroup/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/81WbWvbMBD+LdPHonolHWXkm5OVYuhLSEI/LISiSJdUjSx5enHmGf/3IUt20jWFjW2QT5bvpOeeu3t88iAZXH1OLj6QnTmnbHsu+CqpZ5bQLSY781Sby6QeOboFu6hRCdpwJYGhodUOMAJJdVVYriQaotnl0116n95cf0EYrYSi24lbCU5TSsEYNERnCCPB10ArKmDqBBg0XNTNssE1IozdHrpaD26PnKFls8TjtQw8Ggx0kNSPBV3UiBcpYxqMgS5ATr6nP7oXSewNsbAjVWcxbiXBjpVc843TJFBf1Ihypu+I2fYHc3h1Yl4V3hAyQp7x757QvCQWUBOTeJyMcUCZtdsWNSIl4YKsuOC2+qpkB1MWNGNx7YONfEn7LIsAkhUP8pY4SZ+7nvCivBr/sp0YwzcyK8qrWK4HOdYQs0dnbT4nwSJK4b7vGxouWgGcCsHTYBGkFATkV1PlLMzJSsDevrelxijKW4B+s19cZxP/2BcbR7H+c2WuiTAnUPO/o3E6TE6ERlBhJi1oCb2GwoyLb6m1hD7nIC2eAXWa2+pGK1f4y6SgMRQDQzUvemiMiBBqlwrx4OxKOcki0zgdMrnxhLprAlEiMym4jBdH+LKokhKox+xGv5P8m4NYoLaf/WT5D5h/lp7HP8rE7z+Kehxjb/ed2/s8uzAzDrvwxhBj40waSySFV23i0RgvtiAq+swlZDnZHGgwjA+DhvU7VyFGWgk4YNXFazAneVJPlfChiTEuBzaqPFKhuaS8ICKlVDlp9zJ1OfgDKd1rM5ZyriZKcFq9+s2Yq0kH9cbbqjX0vff1InnXuQxTVQAO9tC0eGCupqrr5AHOWzNjM0ss+G+l+y9qgQPmYZUmWq25gKbBUzDKaQp47IxVeffagrakjvsnWpWcgR4RAzg1BuzMkg2XmzYe0SQHC7rBUjFIXszHcvApGVwkFx9eDOfn2knLc0im4fkTflUzfEIKAAA=
+      Analytics: v2:deflate64:H4sIAAAAAAAA/81WTW/bOBD9LeUxYLSBWwQL32RvEQhIG8M2elgjKMbk2GFNkSo/lHUF/feCIvWRTQPsYvfgk8QZzpvH4eOQs2x2+3t28w6e7TXjp2sp9lmzccBOFJ7t18a+z5qFZyd0u4bUaKzQCjmZO+ORElTMnCsntCJzsnn/9VP+Ob/7+AehZC81O638XgqWM4bWkjm5IpRIcUB2ZhLXXqIl813TPra0IcD5/dTVeWgXckUe20e6PKjIo6XIZlnzpWK7hogq59ygtdgnKOGv/Ec/UODuwOEznHuL9XuFbqnVQRy9gUh91xAmuPkE9jQElvgiYnuugiGuiATG/zTCiBockjYt4stqSSPKppu2awjUICTshRTu/KdWPUxdsYKn/5BsEUo6rLKKIEX1oO7BK/bU74mo6tvl36aDteKoiqq+TeV6UEuDafXkqlvPRbBIUvg87BuZ7zoBXArBy2ARpRQFFP7W2jvcwl7iaB9tubWaiQ5gmBx+Phar8BmLTZNY/3dlHkDaC6j5f6NxOUwuhEZUYaEcGoWDhmKPS6PcOWBPJSpHN8i8Ee58Z7SvwmVSsZSKo2VGVAM0JSClfs6lfPBur73iiWnqDoU6BkL9NUEYqEJJodLFEU8W00ohC5h96/dKfPeYCtTt59BZLh+TdgXokP9d4UKWX/IJ8yd8R9RfY4z2oInRFzjGbjTd31eGlJsWyjpQDF8IQCRjujKjXNmTUFiUcJyoOzYmS+bNG5csJUZLnLDq87VUQJk1ay1DarDWl8gX54BUGaGYqEDmjGmv3HgAfIkhIGej6lMpt3qlpWDnFw+YrV71UK+83TmIuz/4Bqm86XyM/Voijfa4aSlgq9e638kJzmsz5xsHDsMp7F9cHXDEnFZpZfRBSGwpSrBOMKmB70GCYkId61nW5FUlBeu6wL0Gvuh8aHb9Qy2ATR10GiCsQzVOHgOSYzp5C+aIbtDSZNi2dI1We8OQLr11uuyHux7wDf/K6FpwNAuwSHNr0W0cHIU6dsUAAyU6NC1VmmP2zf5Wzz5ks5vs5t03K8S18cqJErN1/P4Eki2/4zkLAAA=
     Metadata:
       aws:cdk:path: CloudCdkStack/CDKMetadata/Default
     Condition: CDKMetadataAvailable

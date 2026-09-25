@@ -4,6 +4,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import {Tags} from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { aws_elasticloadbalancingv2_targets as elasticloadbalancingv2_targets } from 'aws-cdk-lib';
+
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -95,13 +98,30 @@ export class CloudCdkStack extends cdk.Stack {
     userRole.addToPolicy(s3Policy);
 
     const instance = new ec2.Instance(this, 'Instance', {
-       vpc,
-       instanceType: ec2.InstanceType.of(
-           ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO
-       ),
-       machineImage: ec2.MachineImage.latestAmazonLinux2023(),
-       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-       role: userRole,
+      vpc,
+      instanceType: ec2.InstanceType.of(
+          ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO
+      ),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023(),
+      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
+      role: userRole,
+    });
+
+    const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
+      vpc,
+      internetFacing: true,
+      securityGroup: loadBalancerSG,
+    });
+
+    const listener = lb.addListener('Listener', {
+      port: 80,
+      open: true,
+    });
+
+    const instanceTarget = new elasticloadbalancingv2_targets.InstanceTarget(instance);
+    listener.addTargets('Ec2Target', {
+      port: 8080,
+      targets: [instanceTarget]
     });
 
   }
