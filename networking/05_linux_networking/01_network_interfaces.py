@@ -87,6 +87,8 @@ IP address
 prefix
 IPv6 address
 interface state
+
+
 ip link
 
 Focuses more on the interface itself:
