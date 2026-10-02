@@ -6,6 +6,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { aws_elasticloadbalancingv2_targets as elasticloadbalancingv2_targets } from 'aws-cdk-lib';
+import * as rds from 'aws-cdk-lib/aws-rds';
 
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
@@ -123,6 +124,35 @@ export class CloudCdkStack extends cdk.Stack {
       port: 8080,
       targets: [instanceTarget]
     });
+
+    const databaseSG = new ec2.SecurityGroup(this, 'DatabaseSG', {
+      vpc,
+      description: 'Database Security Group',
+      allowAllOutbound: true,    
+    });
+
+    databaseSG.addIngressRule(
+      applicationSG,
+      ec2.Port.tcp(5432),
+      'Allow PostgreSQL from application'
+    );
+
+    const rdsInstance = new rds.DatabaseInstance(this, 'Rdsinstance', {
+      engine: rds.DatabaseInstanceEngine.postgres({
+        version: rds.PostgresEngineVersion.VER_17_7,
+      }),
+      storageEncrypted: true,
+      // optional, defaults to m5.large
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
+      credentials: rds.Credentials.fromGeneratedSecret('syscdk'), // Optional - will default to 'admin' username and generated password
+      vpc,
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+      },
+      securityGroups: [databaseSG],
+      publiclyAccessible: false,
+    });
+
 
   }
 }
