@@ -15,6 +15,7 @@ export class CloudCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // Create a s3 bucket and props
     const bucket = new s3.Bucket(this, 'MyBucket', {
       versioned: true,
       encryption: s3.BucketEncryption.S3_MANAGED,
@@ -26,6 +27,7 @@ export class CloudCdkStack extends cdk.Stack {
       ],
     });
 
+    // add tag on ressources
     const tags = {
        Environment: "development",
        Project: "cloud-engineering-starter",
@@ -36,6 +38,7 @@ export class CloudCdkStack extends cdk.Stack {
        Tags.of(this).add(key, value);
     }
 
+    // create a vpc its own props
     const vpc = new ec2.Vpc(this, 'TheVPC', {
       ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       maxAzs: 2,
@@ -54,6 +57,7 @@ export class CloudCdkStack extends cdk.Stack {
       ]
     });
 
+    // create and configure a security groups
     const loadBalancerSG = new ec2.SecurityGroup(this, 'LoadBalancerSG', {
       vpc: vpc,
       description: 'Load Balancer Security Group',
@@ -98,6 +102,7 @@ export class CloudCdkStack extends cdk.Stack {
     
     userRole.addToPolicy(s3Policy);
 
+    // create an ec2 instance in private vpc subnet
     const instance = new ec2.Instance(this, 'Instance', {
       vpc,
       instanceType: ec2.InstanceType.of(
@@ -108,6 +113,7 @@ export class CloudCdkStack extends cdk.Stack {
       role: userRole,
     });
 
+    // create load balancer with listener and target group
     const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
       vpc,
       internetFacing: true,
@@ -125,6 +131,7 @@ export class CloudCdkStack extends cdk.Stack {
       targets: [instanceTarget]
     });
 
+    // implement rds instance with its SG and Propos
     const databaseSG = new ec2.SecurityGroup(this, 'DatabaseSG', {
       vpc,
       description: 'Database Security Group',
