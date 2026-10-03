@@ -44,8 +44,8 @@ This leads us to an important principle:
 An AI agent should have the minimum capabilities necessary to
 perform its task.
 
-Next we'll distinguish prompt injection, excessive agency,
-and privilege escalation, because these three concepts can easily
+Next we ll distinguish "prompt injection", "excessive agency",
+and "privilege escalation", because these three concepts can easily
 get mixed together.
 
 

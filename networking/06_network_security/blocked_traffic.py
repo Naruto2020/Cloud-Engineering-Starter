@@ -65,8 +65,8 @@ Mechanism			Typical role                      |
 Host firewall		|	Filters traffic on the machine
 Network firewall	|	Filters traffic between networks
 AWS Security Group	|	Controls traffic to/from AWS resources
-AWS Network ACL	Filters |	subnet traffic
-Application firewall		Filters HTTP/application requests
+AWS Network ACL	     | Filters subnet traffic
+Application firewall		|Filters HTTP/application requests
 
 
 We'll eventually distinguish Security Groups vs Network ACLs, which is
@@ -398,7 +398,7 @@ Does the Security Group rule care about the client's MAC address? Or does
 it use the client's IP address?
 
 
-==> Yes The Security Group rule don't care about MAC address it use
+==> The Security Group rule don't care about MAC address it use
 client's IP address
 
 

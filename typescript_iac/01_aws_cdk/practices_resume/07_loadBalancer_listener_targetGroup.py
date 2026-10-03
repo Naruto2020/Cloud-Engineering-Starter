@@ -44,21 +44,75 @@ The EC2 instance remains in a private subnet.
 # ============================================================
 
 ApplicationLoadBalancer
+
 → Creates the Application Load Balancer.
 
 addListener()
+
 → Creates a listener that accepts incoming traffic.
 
 addTargets()
+
 → Connects the listener to a Target Group and defines the
   backend target.
 
 Target Group
+
 → Defines where the ALB sends the traffic.
 
 
 # ============================================================
-# 3. CloudFormation resources
+# 3. Connecting the EC2 to the Target Group
+# ============================================================
+
+The EC2 instance itself is represented by the CDK
+ec2.Instance construct.
+
+To use this EC2 as a Target Group target, we created an
+InstanceTarget:
+
+const instanceTarget =
+  new elasticloadbalancingv2_targets.InstanceTarget(instance);
+
+InstanceTarget adapts the EC2 instance so that it can be used
+as a target by the Load Balancer Target Group.
+
+The relationship is:
+
+ec2.Instance
+     │
+     ▼
+InstanceTarget
+     │
+     ▼
+Target Group
+     │
+     ▼
+ALB
+
+Then the target is passed to addTargets():
+
+listener.addTargets('ApplicationTarget', {
+  port: 8080,
+  targets: [instanceTarget],
+});
+
+This means that the Target Group uses our EC2 instance as its
+backend target and sends traffic to it on port 8080.
+
+The important distinction is:
+
+instance
+
+→ represents the EC2 resource.
+
+InstanceTarget
+
+→ represents that EC2 instance as a Load Balancer target.
+
+
+# ============================================================
+# 4. CloudFormation resources
 # ============================================================
 
 When we ran `cdk synth`, the high-level CDK configuration was
@@ -67,8 +121,11 @@ translated into several CloudFormation resources.
 We verified:
 
 AWS::ElasticLoadBalancingV2::LoadBalancer
+
 AWS::ElasticLoadBalancingV2::Listener
+
 AWS::ElasticLoadBalancingV2::TargetGroup
+
 AWS::EC2::Instance
 
 The `V2` in `AWS::ElasticLoadBalancingV2::*` is part of the
@@ -84,7 +141,7 @@ CloudFormation resources.
 
 
 # ============================================================
-# 4. Target Group verification
+# 5. Target Group verification
 # ============================================================
 
 We inspected the synthesized CloudFormation to verify the
@@ -104,14 +161,25 @@ we created earlier.
 The Target Group also contains:
 
 Port: 8080
+
 Protocol: HTTP
 
 So the ALB receives the request on port 80 and forwards it
 to the EC2 target on port 8080.
 
+The important relationship is:
+
+ALB
+ ↓
+Listener :80
+ ↓
+Target Group
+ ↓
+EC2 instance :8080
+
 
 # ============================================================
-# 5. Security Groups
+# 6. Security Groups
 # ============================================================
 
 The network flow is controlled by the Security Groups:
@@ -140,7 +208,7 @@ Internet.
 
 
 # ============================================================
-# 6. Network placement
+# 7. Network placement
 # ============================================================
 
 The ALB is placed in public subnets.
@@ -157,7 +225,7 @@ Private EC2
 
 
 # ============================================================
-# 7. What we learned from `cdk synth`
+# 8. What we learned from `cdk synth`
 # ============================================================
 
 The important practical step was not only writing the CDK code.
@@ -173,15 +241,24 @@ and then inspected the generated CloudFormation.
 This allowed us to verify the relationships between:
 
 Load Balancer
+
 Listener
+
 Target Group
+
 EC2
+
 Security Groups
+
 Subnets
+
+We specifically verified that the Target Group uses the
+EC2 instance as an instance target and that traffic is sent
+to port 8080.
 
 
 # ============================================================
-# 8. CDK abstraction
+# 9. CDK abstraction
 # ============================================================
 
 A relatively small amount of CDK code such as:
@@ -189,6 +266,8 @@ A relatively small amount of CDK code such as:
 ApplicationLoadBalancer
         ↓
 addListener()
+        ↓
+InstanceTarget
         ↓
 addTargets()
 
@@ -212,7 +291,7 @@ Understand the actual AWS resources and relationships
 
 
 # ============================================================
-# 9. Final mental model
+# 10. Final mental model
 # ============================================================
 
 Application Load Balancer
@@ -226,7 +305,10 @@ Application Load Balancer
    HTTP :8080
         │
         ▼
-     EC2 Instance
+  InstanceTarget
+        │
+        ▼
+   EC2 Instance
    Private subnet
 
 Security Groups control which traffic is allowed.
@@ -239,4 +321,8 @@ The Listener receives the request.
 
 The Target Group identifies the backend target.
 
-The EC2 instance receives the forwarded application traffic.
+InstanceTarget represents the EC2 instance as a Target Group
+target.
+
+The Target Group forwards the request to the EC2 instance
+on port 8080.
