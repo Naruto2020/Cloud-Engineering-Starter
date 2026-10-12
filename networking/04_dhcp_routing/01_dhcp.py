@@ -288,8 +288,9 @@ IP
 Subnet
 Gateway
 DNS server
-DNS
 
+
+DNS
 Answers:
 
 "What IP address belongs to this domain?"

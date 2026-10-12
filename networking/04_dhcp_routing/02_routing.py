@@ -134,7 +134,8 @@ Therefore:
 
 4. The Most Important Routing Rule
 
-When several routes could potentially match a destination, Linux chooses the most specific route — the route with the longest prefix.
+When several routes could potentially match a destination, Linux chooses the most specific route — the route with 
+the longest prefix.
 
 For example:
 
