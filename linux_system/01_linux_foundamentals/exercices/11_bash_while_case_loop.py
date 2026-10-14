@@ -409,3 +409,24 @@ we want:
 ./service.sh start
 
 and $1 should contain start.
+
+======================================================================
+
+#!/bin/bash
+
+action="$1"
+
+case "$action" in
+    start)
+        echo "Starting service"
+        ;;
+    stop)
+        echo "stopping service"
+        ;;
+    status)
+        echo "checking service"
+        ;;
+    *)
+        echo "Unknown action"
+        ;;
+esac                    
