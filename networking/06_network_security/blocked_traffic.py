@@ -552,3 +552,146 @@ Is something listening on :443?
       Yes / No
           ↓
 If needed → check host firewall
+
+
+If ss -lntp shows:
+LISTEN ... 0.0.0.0:443
+
+
+What does 0.0.0.0 mean?
+A. The service listens only on localhost.
+B. The service listens on all IPv4 interfaces on the server.
+C. The service accepts connections from every IP address on the Internet.
+
+==> B The service listen on all Ipv4 interfaces on the server.
+
+
+Correct! ✅ B. The service listens on all IPv4 interfaces on the server.
+Remember the distinction:
+- 127.0.0.1:443 → only localhost.
+- 10.0.1.10:443 → a specific interface.
+- 0.0.0.0:443 → all IPv4 interfaces.
+
+Important: Listening on 0.0.0.0 does not mean the service is accessible from the entire Internet. Routing, firewalls, 
+AWS Security Groups, and other controls still determine reachability.
+
+Network Security — Part 1 checkpoint
+
+You've practiced the fundamentals:
+- CIDR ranges and source-IP matching.
+- Inbound vs. outbound traffic.
+- AWS Security Group rules: protocol, port, and source.
+- Connection refused vs. Connection timed out.
+- Checking listeners with ss.
+- Understanding binding addresses.
+
+Next question
+Before we move on, let's check one last troubleshooting concept.
+An EC2 instance has a service listening on 0.0.0.0:443, and its Security Group allows inbound TCP port 443 from your IP. 
+However, nc -vz still times out.
+What are two other possible causes you would investigate?
+
+==> nc -vz command help to check TCP connexion so if still time out I ll investigate :
+  -  Firewall
+  - ACL 
+
+  Correct! ✅ Your reasoning is good: nc -vz tests TCP connectivity, and a timeout means the connection attempt received 
+  no response before the timeout.
+
+Your two checks are relevant:
+- Firewall — a host firewall or network firewall might silently drop packets.
+- Network ACL (NACL) — an AWS subnet-level rule might block the traffic.
+
+One important detail: an EC2 Security Group allowing TCP 443 doesn't guarantee that other network controls allow it too.
+Other possible causes include:
+- Routing — a route or return path is missing.
+- Client-side outbound filtering — the client's firewall blocks the connection.
+
+
+Next concept: Stateful vs. stateless filtering
+
+Before comparing AWS Security Groups and Network ACLs, we need to understand two terms.
+1. Stateful filtering
+
+A stateful firewall remembers an established connection. When a client initiates an allowed connection, the firewall 
+automatically recognizes the return traffic belonging to that connection.
+
+Example:
+Client  ── TCP request ──> Server
+Client  <── TCP response ── Server
+
+
+If the outbound request is allowed and the connection is tracked, the return traffic is automatically permitted by the 
+stateful firewall.
+
+2. Stateless filtering
+
+A stateless firewall evaluates each packet independently against its rules. You must account for traffic in both directions, 
+including the return traffic.
+
+For example, allowing a client to connect to a server's TCP port 443 may not be enough: the rules must also permit the 
+response traffic back to the client, including the relevant ephemeral destination port.
+
+We'll apply these concepts to AWS Security Groups and Network ACLs after we've covered the necessary foundations.
+
+For now, just one question:
+If a stateful firewall allows a client's TCP connection to a server, what does it do with the return traffic belonging to 
+that same connection?
+
+==> The stateful firewall ll remember established connection and ll automatically reconizes the return trafic 
+
+A stateful firewall tracks the connection and automatically recognizes the return traffic belonging to that connection.
+
+Client                         Server
+10.0.5.20:51500                 10.0.1.10:443
+     │                               │
+     ├──── TCP connection request ──>│
+     │                               │
+     │<────── Return traffic ────────┤
+     │                               │
+     └── Firewall tracks connection ┘
+
+
+Notice that the client's source port 51500 is an example of an ephemeral port — a temporary port used for the connection.
+The stateful firewall tracks the connection, so the return traffic doesn't need a separate rule merely to allow that 
+response.
+
+A stateless firewall evaluates each packet independently. It doesn't remember that the client initiated an allowed connection.
+For the connection to work, the rules must allow both the initial request and the return traffic.
+
+Client                              Server
+
+10.0.5.20:51500                     10.0.1.10:443
+     │                                    │
+     ├──── Request to TCP port 443 ──────>│
+     │                                    │
+     │<──── Response to port 51500 ───────┤
+     │                                    │
+     ▼                                    ▼
+Stateless firewall checks each packet independently
+
+
+Notice the important port distinction:
+- Request: destination port 443 on the server.
+- Response: destination port 51500 on the client in this example.
+
+The return traffic must be permitted by the applicable rules too.
+
+Quick recap
+
+Stateful	                                                                       Stateless
+
+Tracks connections	                                                      Doesn't track connections
+
+Recognizes return traffic for an allowed connection	                      Evaluates return packets independently
+
+Return traffic is automatically permitted by the connection-tracking      behavior	Rules must explicitly permit the necessary 
+                                                                          return traffic
+
+
+One nuance: a stateless firewall doesn't necessarily require a separate rule for every individual packet. It requires 
+rules that match the relevant traffic in each direction.
+
+Next step
+Now that you understand both concepts, we're ready to introduce how AWS Security Groups and Network ACLs use them.
+
