@@ -7,6 +7,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { aws_elasticloadbalancingv2_targets as elasticloadbalancingv2_targets } from 'aws-cdk-lib';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as ecr from 'aws-cdk-lib/aws-ecr';
 
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
@@ -158,6 +159,12 @@ export class CloudCdkStack extends cdk.Stack {
       },
       securityGroups: [databaseSG],
       publiclyAccessible: false,
+    });
+
+    // Create a private ECR repository
+    const repository = new ecr.Repository(this, 'TestRepository', {
+      repositoryName: 'my-app',
+      imageScanOnPush: true
     });
 
 

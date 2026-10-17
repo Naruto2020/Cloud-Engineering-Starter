@@ -228,7 +228,7 @@ Take your time and explain your reasoning. I'll correct your answer
 before we move to the next concept.
 
 
-==> ye the packet ll be allowed , because ip is inside source range 
+==> yes the packet ll be allowed , because ip is inside source range 
 
 
 Correct! ✅ The packet will be ALLOWED because 10.0.5.20 belongs to the 
@@ -237,3 +237,65 @@ source CIDR range 10.0.0.0/16.
 Rule 100 matches first, so AWS applies ALLOW and stops evaluating rules. 
 Rule 110 is never reached.
 
+
+Next concept: Inbound vs. outbound NACL rules
+A NACL has two independent rule lists. The direction is defined from the subnet's perspective.
+
+1. Inbound rules
+Filter traffic entering the subnet.
+Example: A client outside the subnet tries to connect to an EC2 instance on TCP port 443.
+
+2. Outbound rules
+Filter traffic leaving the subnet.
+Example: An EC2 instance sends a request to a web server outside the subnet.
+
+Important: NACLs are stateless
+Unlike Security Groups, NACLs don't automatically allow return traffic. You must have rules that allow traffic in both directions when needed.
+For example, when an EC2 instance receives an HTTPS request on TCP port 443, its response usually leaves using an ephemeral client port (a temporary port chosen for that connection). The outbound NACL must allow the response traffic, and the inbound NACL must allow the corresponding return traffic.
+We'll examine the port details separately rather than mixing too many concepts at once.
+Your turn
+An external client sends an HTTPS request to an EC2 instance in a subnet.
+Which NACL rule list evaluates the request as it enters the subnet: inbound or outbound?
+
+==> inbound
+
+Correct! ✅ Inbound rules.
+The request is entering the subnet from an external client, so the subnet's inbound NACL rules evaluate it.
+Remember:
+- Inbound: traffic entering the subnet.
+- Outbound: traffic leaving the subnet.
+Next question
+The EC2 instance receives the HTTPS request and sends a response back to the client.
+Which NACL rule list evaluates that response as it leaves the subnet: inbound or outbound?
+
+==> outbound
+
+Correct! ✅ Outbound rules.
+
+The EC2 instance's response leaves the subnet to return to the external client, so the outbound NACL rules evaluate it.
+Let's connect this to the key difference between Security Groups and NACLs:
+- Security Group: Stateful — automatically allows return traffic for an allowed connection.
+- NACL: Stateless — evaluates inbound and outbound traffic independently.
+
+Next concept: Return traffic and ephemeral ports
+When a client connects to an HTTPS server, it typically uses:
+- Client source port: a temporary ephemeral port, such as 51500.
+- Server destination port: 443.
+The request looks like this:
+Client:51500 → Server:443
+The response reverses the direction:
+Server:443 → Client:51500
+
+Because NACLs are stateless, their rules must allow the relevant traffic in both directions.
+Your turn: If an EC2 instance receives a request on TCP port 443, which destination port does the client's response traffic use when it 
+returns to the client: 443 or 51500?
+
+==> 51500 temporary port
+
+Exactly right! ✅ The response goes to the client's temporary port 51500, called an ephemeral port.
+Let's trace the connection:
+Direction	Source	Destination
+HTTPS request	Client:51500	Server:443
+HTTPS response	Server:443	Client:51500
+Why this matters for NACLs: Because NACLs are stateless, the rules must permit traffic in both directions. For a typical HTTPS connection, that means allowing the request to reach server port 443 and allowing the response to return to the client's ephemeral port.
+Security Groups are stateful, so they automatically recognize return traffic for an allowed connection.

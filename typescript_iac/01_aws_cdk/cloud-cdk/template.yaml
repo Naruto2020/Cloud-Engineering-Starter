@@ -788,10 +788,27 @@ Resources:
     DeletionPolicy: Snapshot
     Metadata:
       aws:cdk:path: CloudCdkStack/Rdsinstance/Resource
+  TestRepositoryC0DA8195:
+    Type: AWS::ECR::Repository
+    Properties:
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      RepositoryName: my-app
+      Tags:
+        - Key: Environment
+          Value: development
+        - Key: Owner
+          Value: steve
+        - Key: Project
+          Value: cloud-engineering-starter
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: CloudCdkStack/TestRepository/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/81X227jNhD9luVjwKiBtwgKv8lOGhjNJobtzUONYDGmxgpjilR5cdYV9O8FReqSxgEa7Bbwk6QZzuHh8MyQGiWjy9+Si0/wYs5ZtjsXfJNUSwtsR+HFfKvM56SaOLZDu67IHrXhSmJGxlY7pAQl04fSciXJmCw/f/uS3qU311eEko1QbDd3G8FZyhgaQ8bkjFAi+BbZgQlcOIGGjNdV/VjTikCW3Q5djYc2IWfksX6k060MPGqKbJRUDyVbV4SXaZZpNAbbCQr4nv7dfkiwN2DxBQ6txbiNRDtVcstzpyFQX1eE8Ux/AbPrAgt8FbE6lN4QVkQ84/8aofkeLJI6LuJhPqUBZdkMW1cE9sAFbLjg9vCnki3MvmSzLL77ySY+pd0qywAyK+/lLTjJnto94eX+cvqv4WAMz+Ws3F/GdN3Lqca4enLWrOckWEQp3HX7RsbrRgCnQvA0WAQpBQH5t4VyFlewEdjbe1tqjGK8AegG+5fr2dw/+mTTKNafrswtCHMCOf8xGqfD5ERoBBXOpEUtsdNQ6HHxK7UW2FOB0tIlMqe5Pdxo5Up/mJQsTpWhYZqXHTQlIIR6SYW4d3ajnMwi09gdZjL3hNpjgjCQMym4jAdHqCympETmMdvW7yT/y2FMULOfXWc5fUzaJKBB/lji/CxH+fjxA7496nGM3u410fuiIv8HUqHHDVXzxhCD6UwaC5LhK1nxaIwHcSgC9sQlzgrIBzUT2p0h4+qdo5sSrUQIaDUfoGvKoUiqhRJ+ajDGFZhNDh6p1FwyXoJIGVNO2r6sXIE+IGV9LcVcrNRcCc4Or65FKzVvod54m+oKmup8nQDfdT6GU0AgDfaQ9RiwUgvVbsUA5605y5YWLPrabu9xDXDAHGZprtWWC6wpCjCWM6Eg24AAybjM96OkSstScNb0llsF2aTxoV631z8PNnTQYQA3FmU/uA+IjuHgFegcbaelwWdNdWaS6gosbMDgQFAoc+47bPs2kFMwPIRbsR+xdUJ0n1Fxz0oPTTUlJWgo0KJuZv4dCi4O7dWRy1zgV4N6oWxDecD+1ayvw1xZKm3NAiFbYBMwAbZzpemKcgtOWA/cXVRrSoxVGnK8Dtf4/l5/pHSYxgyl5SBMXzkfqiEzrFwTpURJ2ZxK4hB+E/jGqyx0+0caUNsT421n+SgFjYXa93XU1fPVZDATbUWwRKaba1D/m/MHdilvnHf9rV+HvC8w73q5rxM3TPmRsGPY+J0Jl+H0CTQwi9oMpgCG93IOxrwonU01t6g5TJ9A5v4XKGzfMSpxnX3nCkxMARJy1EkVeqvG5qTWaENx9Af4uorkIxnb+Afgx8Pqmi7QKKcZ0qkzVhXt57qt1Hf8c632PEM9AYM0NQbt0kLOZd50mbaGaipVhsmz+WU/+jUZXSQXn54N5+faScsLTBbh+Q8qy1/P6A4AAA==
+      Analytics: v2:deflate64:H4sIAAAAAAAA/81X227jNhD9luVjwKiBtwgKv8lOGhjNJobtzUONYDGmxgpjilR5cdYV9O8FReqSxgEa7Bbwk8QZzvBwdOaiUTK6/C25+AQv5pxlu3PBN0m1tMB2FF7Mt8p8TqqJYzu064rsURuuJGZkbLVDSlAyfSgtV5KMyfLzty/pXXpzfUUo2QjFdnO3EZyljKExZEzOCCWCb5EdmMCFE2jIeF3VjzWtCGTZ7VDVaGhjckYe60c63cqAo6bIRkn1ULJ1RXiZZplGY7A9oIDv6d/tQoK9AYsvcGglxm0k2qmSW547DQH6uiKMZ/oLmF1nWOAri9Wh9IJwI+IR/1cLzfdgkdTxEg/zKQ1els22dUVgD1zAhgtuD38q2brZl2yWxXd/2MSHtLtlGZzMynt5C06yp/ab8HJ/Of3XdjCG53JW7i9juO7lVGO8PTlr7nMSKCIV7rrvRsbrhgCnAvA0UAQqBQL5t4VyFlewEdjLe1lqjGK8cdBt9i/Xs7l/9MGmkaw/nZlbEOYEYv5jME4HyYnACCycSYtaYsehUOPiKrUW2FOB0tIlMqe5Pdxo5UrfTEoWj8rQMM3LzjUlIIR6SYW4d3ajnMwi0lgdZjL3gNo2QRjImRRcxsYRMospKZF5n23pd5L/5TAGqPmeXWU5fZ+0CUDj+WOB86ccxeP3D/D2Xo/76OWeE70uMvJ/ABVq3JA1bwTRmM6ksSAZvqIVj8LYiEMSsCcucVZAPsiZUO4MGVfvtG5KtBLBoOV8cF1TDkVSLZTwR4MxrsBscvCeSs0l4yWIlDHlpO3TyhXoDVLW51KMxUrNleDs8GosWql56+qNtsmuwKlO1xHwXeVj6AICaZCHqEeDlVqo9lMM/LwVZ9nSgkWf2+0c1zgOPodRmmu15QJrigKM5UwoyDYgQDIu8/0oqdKyFJw1teVWQTZpdKjX7fjnnQ0VdGjAjUXZb+4NomK4eQU6R9txabCsqc5MUl2BhQ0YHBAKZc59hW3fBnQKgocwFfsdWydEt4yMe1Z6KKopKUFDgRZ1c/LvUHBxaEdHLnOBXw3qhbIN5AH6V6e+NnNlqbQ1C4RsgY3BBNjOlaZLyi04Yb3jblCtKTFWacjxOozx/Vx/JHWYxgyl5SBMnzkfyiEzzFwTqURJ2XQlcQi/CXzjWRaq/SMNXtuO8bayfBSCxkLt+zzq8vlqMjiJtiRYItPNGNT/5vyBXcgb5V0/9esQ9wXmXS33eeKGIT9idsw3fmfCZTh9Ag3MojaDI4DhvZyDMS9KZ1PNLWoO0yeQuf8FCp/vGJR4z75yBSSmAAk56qQKtVVj06k12pAcfQNfVxF8BGMb/cD5cTP/u6aTaoGlMtwqfVhXHl9cDALBfVFeMpD3cu5MnJBjrer21zVdoFFOM6RTZ6wq2uW6zft39HOt9jxDPQGDNDUG7dJCzmXe1Kw2I2sqVYbJs/llP/o1GV0kF5+eDefn2knLC0wW4fkPRAG6EjYPAAA=
     Metadata:
       aws:cdk:path: CloudCdkStack/CDKMetadata/Default
     Condition: CDKMetadataAvailable
