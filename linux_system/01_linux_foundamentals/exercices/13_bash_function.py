@@ -323,3 +323,138 @@ What do you think the output will be, and why?
 
 Server checked
 1
+
+
+Exercise — Check a function's exit status
+
+
+
+#!/bin/bash
+
+check_server() {
+    echo "Checking server health..."
+    return 1
+}
+
+if check_server; then
+    echo "Continue deployment"
+else
+    echo "Stop deployment"
+fi
+
+
+Your question: When this script runs, which messages will be printed, and
+why?
+
+Try to explain it in your own words. I'll correct your reasoning before 
+we move to the next concept.
+
+==> When this script run, we will have : Stop deployment.
+    Because The condition check the function return and ll  disaplay
+    Continue deployment only if success what mean return 0, but 
+    check_server return 1
+
+
+
+=======================================================================
+
+
+Next concept: Input validation
+Before using a function's result or starting a deployment, scripts often 
+need to verify that the user supplied the required arguments.
+
+For example, a deployment script might expect:
+./deploy.sh production eu-west-1
+
+
+Here:
+- $1 is production
+- $2 is eu-west-1
+
+But what happens if someone runs ./deploy.sh without providing those 
+arguments?
+
+The script might try to deploy without knowing the target environment or 
+AWS region. Input validation prevents this kind of mistake.
+
+
+Exercise 1
+Consider this script:
+
+
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+    echo "Error: Expected 2 arguments"
+    exit 1
+fi
+
+echo "Environment: $1"
+echo "Region: $2"
+
+
+Question: If someone runs ./deploy.sh production with only one argument, 
+what will the script print, and will it execute the two echo commands at 
+the end? Why?
+
+
+==> If someone runs ./deploy.sh production 
+ with only one argument, the script will print 
+" Error: Expected 2 arguments " And it ll not execute the two commands at
+the end because the program ll exit 
+
+
+Exactly! ✅ Your answer is correct.
+
+The output will be:
+Error: Expected 2 arguments
+
+
+Why does it work?
+1. The user provides only one argument: production.
+2. Bash sets $# to 1.
+3. The condition [ "$#" -ne 2 ] is true because 1 is not equal to 2.
+4. The script prints the error message.
+5. exit 1 terminates the script immediately, so the two echo commands at 
+the end never execute.
+
+Important distinction:
+- return 1 exits a function and gives it a failure status.
+- exit 1 terminates the entire script (or shell process).
+Both communicate failure, but they operate at different levels.
+
+
+
+========================================================================
+
+Next exercise — Input validation in a deployment script
+Now let's make the script a little more realistic.
+
+
+
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+    echo "Error: Expected 2 arguments"
+    exit 1
+fi
+
+environment="$1"
+region="$2"
+
+if [ "$environment" = "production" ] || [ "$environment" = "staging" ]; then
+    echo "Deploying to $environment in $region"
+else
+    echo "Error: Invalid environment"
+    exit 1
+fi
+
+Your question: What happens when someone runs this command?
+
+./deploy.sh development eu-west-1
+
+Tell me what it prints and why. We'll continue one exercise at a time.
+
+==> When this command is run, program ll print: "Error: Invalid environment"
+    Because this script only accepts production or staging as the 
+    environment. While the env arg in command is development
