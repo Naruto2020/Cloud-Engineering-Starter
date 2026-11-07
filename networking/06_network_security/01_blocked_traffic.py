@@ -224,7 +224,7 @@ Prefix	Network bits	Host bits	Total addresses	Usable hosts*	Typical meaning
 /32	32	0	1		1				Single IP / host route
 
 
-*Traditional IPv4 calculation: total − network address − broadcast 
+*Traditional IPv4 calculation: total network address broadcast 
 address. /31 is a special case commonly used for point-to-point links.
 
 Your /16, /24, /26 idea
@@ -484,6 +484,7 @@ listening on that port or a firewall reject something block
 
 Important troubleshooting rule
 
+
 Don't immediately conclude:
 
 refused = service definitely down
@@ -593,7 +594,7 @@ What are two other possible causes you would investigate?
 
 ==> nc -vz command help to check TCP connexion so if still time out I ll investigate :
   -  Firewall
-  - ACL 
+  -  ACL 
 
   Correct! ✅ Your reasoning is good: nc -vz tests TCP connectivity, and a timeout means the connection attempt received 
   no response before the timeout.

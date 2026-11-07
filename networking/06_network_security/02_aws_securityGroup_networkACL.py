@@ -264,6 +264,7 @@ The request is entering the subnet from an external client, so the subnet's inbo
 Remember:
 - Inbound: traffic entering the subnet.
 - Outbound: traffic leaving the subnet.
+
 Next question
 The EC2 instance receives the HTTPS request and sends a response back to the client.
 Which NACL rule list evaluates that response as it leaves the subnet: inbound or outbound?
@@ -278,24 +279,31 @@ Let's connect this to the key difference between Security Groups and NACLs:
 - NACL: Stateless — evaluates inbound and outbound traffic independently.
 
 Next concept: Return traffic and ephemeral ports
+
 When a client connects to an HTTPS server, it typically uses:
 - Client source port: a temporary ephemeral port, such as 51500.
 - Server destination port: 443.
+
 The request looks like this:
+
 Client:51500 → Server:443
 The response reverses the direction:
 Server:443 → Client:51500
 
 Because NACLs are stateless, their rules must allow the relevant traffic in both directions.
+
 Your turn: If an EC2 instance receives a request on TCP port 443, which destination port does the client's response traffic use when it 
 returns to the client: 443 or 51500?
 
 ==> 51500 temporary port
 
 Exactly right! ✅ The response goes to the client's temporary port 51500, called an ephemeral port.
+
 Let's trace the connection:
 Direction	Source	Destination
 HTTPS request	Client:51500	Server:443
 HTTPS response	Server:443	Client:51500
-Why this matters for NACLs: Because NACLs are stateless, the rules must permit traffic in both directions. For a typical HTTPS connection, that means allowing the request to reach server port 443 and allowing the response to return to the client's ephemeral port.
+Why this matters for NACLs: Because NACLs are stateless, the rules must permit traffic in both directions. For a typical HTTPS connection, 
+that means allowing the request to reach server port 443 and allowing the response to return to the client's ephemeral port.
+
 Security Groups are stateful, so they automatically recognize return traffic for an allowed connection.

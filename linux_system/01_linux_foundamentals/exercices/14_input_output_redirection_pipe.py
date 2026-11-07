@@ -142,7 +142,8 @@ The order matters. In this example, both streams end up in output.log.
 
 
 Your exercise
-You want to run a service check and save both normal output and error messages to service.log, overwriting the file if it already exists.
+You want to run a service check and save both normal output and error messages to service.log, overwriting the file if it 
+already exists.
 
 Complete this command:
 
