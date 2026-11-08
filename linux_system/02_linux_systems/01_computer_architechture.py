@@ -377,6 +377,7 @@ Only two threads can execute simultaneously on those two logical CPUs. The sched
 Two important concepts:
 - Runnable: A thread is ready to execute but may be waiting for CPU time.
 - Blocked: A thread cannot continue until an event occurs, such as a network response or disk operation.
+
 Your exercise:
 
 An EC2 instance has 2 vCPUs and 6 runnable threads.
