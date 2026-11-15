@@ -199,3 +199,85 @@ Why does this matter?
 It protects the operating system from applications that crash, behave 
 incorrectly, or attempt unauthorized operations.
 
+
+Exercise 3 — User Mode vs Kernel Mode
+Imagine you are running a Python application on an EC2 Linux instance.
+
+The application attempts to directly access a protected area of kernel memory.
+
+Questions:
+
+1. Is this operation allowed in User Mode?
+2. What happens if the application attempts it?
+3. Why does Linux enforce this separation?
+
+A1. No this operation is not allowed in User Mode
+A2. Error because there is no permissions 
+A3. Linux enforce this separation to protect system
+in case app fail 
+
+========================================================================
+
+			Notion 4 — What happens when a system call is made?
+
+
+
+Let's connect the concepts we've learned.
+
+Imagine a Python application executes:
+with open("data.txt", "r") as file:    content = file.read()
+
+
+
+The simplified execution sequence is:
+1. User Mode
+
+Python requests a file operation
+
+2. System Call
+
+Execution transitions into Kernel Mode
+
+3. Kernel Mode
+
+Kernel checks permissions and handles file access
+
+4. Return to User Mode
+
+Python receives the result
+
+
+Important: A system call does not necessarily mean the physical disk must be accessed. The requested data might already be available in the filesystem cache in RAM.
+
+Exercise 4
+In the example above, suppose data.txt is already cached in RAM.
+
+Question: Does the kernel still need to handle the file-reading request, or can Python bypass the kernel because the data is already in RAM?
+
+Explain why.
+
+A. No the kernel does not need to handle the file-reading request , because 
+data is already available in filesystem cache in RAM
+
+
+Correction
+The kernel still needs to handle the file-reading request.
+
+Why?
+1. Python runs in User Mode.
+2. Python requests the file data through a system call.
+3. The kernel handles the request and checks the filesystem cache.
+4. If the data is already cached in RAM, the kernel retrieves it from the cache instead of accessing the physical disk.
+5. The kernel returns the data to Python.
+The important distinction:
+- RAM cache: Avoids physical disk access.
+- System call: Still required to request the protected filesystem operation.
+Python cannot bypass the kernel just because the data is already in RAM.
+
+
+========================================================================
+
+				Notion 5: Memory Isolation
+
+=======================================================================
+
